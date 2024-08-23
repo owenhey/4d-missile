@@ -9,12 +9,17 @@ namespace Scripts.Core.Player {
         [SerializeField] private FloatReference _validRadius;
         [SerializeField] private Transform _mousePos;
         
+        [Header("Stat Calcs")]
+        [SerializeField] private PlayerSpeedCalculation _speedCalculator;
+        [SerializeField] private PlayerAccCalculation _accelerationCalculator;
+        
         private Transform _playerTrans;
         private Camera _camera;
 
         private Vector3 _playerVel;
 
         public static System.Action<float> OnTakeDamage;
+        
 
         [ReadOnly] public float Health;
         public float MaxHealth = 100;
@@ -23,6 +28,10 @@ namespace Scripts.Core.Player {
             _playerTrans = transform;
             _camera = Camera.main;
             Health = MaxHealth;
+
+            for (int i = 1; i < 20; i++) {
+                _accelerationCalculator.Calc(i);
+            }
         }
 
         private void OnEnable() {
@@ -51,8 +60,13 @@ namespace Scripts.Core.Player {
             RaycastHit hit;
             if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, 50, _gamePlaneMask)) {
                 Vector3 directionFrom0 = Vector3.ClampMagnitude(hit.point, _validRadius.Value);
-                float maxSpeed = Input.GetKey(KeyCode.Space) ? 1.0f : 15;
-                _playerTrans.position = Vector3.SmoothDamp(_playerTrans.position, directionFrom0, ref _playerVel, .2f, maxSpeed);
+                float maxSpeed = Input.GetKey(KeyCode.Space) ? 1.0f : _speedCalculator.GetSpeed();
+                float acceleration = _accelerationCalculator.GetAcceleration();
+                Debug.Log($"Max speed: {maxSpeed}");
+                Debug.Log($"Max acceleration: {acceleration}");
+                
+                
+                _playerTrans.position = Vector3.SmoothDamp(_playerTrans.position, directionFrom0, ref _playerVel, acceleration, maxSpeed);
                 _mousePos.position = directionFrom0;
             }
         }

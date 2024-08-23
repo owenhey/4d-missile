@@ -18,7 +18,7 @@ namespace Scripts.Core.Obstacles {
         [SerializeField] private FloatReference _playerSpeed;
         [SerializeField] private FloatReference _obstacleRotationSpeed;
 
-        public static Action<bool> OnSuccessfulPass;
+        public static Action<bool> OnObstaclePass;
 
         public bool IsFinishLine;
 
@@ -57,13 +57,12 @@ namespace Scripts.Core.Obstacles {
         }
 
         public void OnPassedPlayer() {
-            OnSuccessfulPass?.Invoke(IsFinishLine);
-            if (!_hitPlayer) {
-                if (_hiders != null) {
-                    foreach (var hider in _hiders) {
-                        hider.Hide();
-                    }
-                }
+            OnObstaclePass?.Invoke(IsFinishLine);
+            if (_hitPlayer) return;
+            if (_hiders == null) return;
+            
+            foreach (var hider in _hiders) {
+                hider.Hide();
             }
         }
     }

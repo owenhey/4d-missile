@@ -24,7 +24,7 @@ namespace Scripts.Core.Level{
             LevelData levelData = new() {
                 StartingSpeed = 10,
                 EndingSpeed = 20,
-                Obstacles = CreateEvenlySpacedArray(40, 2)
+                Obstacles = CreateEvenlySpacedArray(40, 50)
             };
             PlayLevel(levelData);
         }
@@ -90,12 +90,12 @@ namespace Scripts.Core.Level{
         }
         
         private void Awake() {
-            ObstacleBehavior.OnSuccessfulPass += SuccessfulObstaclePassHandler;
+            ObstacleBehavior.OnObstaclePass += SuccessfulObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
         }
 
         private void OnDestroy() {
-            ObstacleBehavior.OnSuccessfulPass -= SuccessfulObstaclePassHandler;
+            ObstacleBehavior.OnObstaclePass -= SuccessfulObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
         }
     }

@@ -15,7 +15,7 @@ namespace Scripts.Core.Obstacles{
             }
         }
         
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate() {
             if (_parentBehavior == null) {
                 ObstacleBehavior parentBehav = GetComponentInParent<ObstacleBehavior>();

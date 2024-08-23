@@ -11,13 +11,15 @@ namespace Scripts.Core.Weapons {
         private Camera _camera;
         
         public static Collider[] HitColliders = new Collider[8];
+        
+        public static System.Action<Vector3> OnBombThrow;
 
         private void Start() {
             _camera = Camera.main;
         }
         
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.Q)) {
+            if (Input.GetKeyDown(KeyCode.Mouse0)) {
                 ShootGrenade();
             }
         }
@@ -26,6 +28,8 @@ namespace Scripts.Core.Weapons {
             Vector3 targetPos = GetMousePos();
             var grenade = Instantiate(_basicGrenade, _weaponParent);
             grenade.Setup(transform.position, targetPos);
+            
+            OnBombThrow?.Invoke(targetPos);
         }
 
         private Vector3 GetMousePos() {
