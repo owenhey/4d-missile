@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Acceleration
   m_EditorClassIdentifier: 
   UpgradeName: Acceleration
+  _levelToUpgrade: {fileID: 11400000, guid: 30cbe5aa12972194cb3607d1f6fea08e, type: 2}
   Icon: {fileID: 21300000, guid: 387190495388b2f4ba1760d2ab5c4850, type: 3}
   Text: Increase your acceleration.
   Cost: 50

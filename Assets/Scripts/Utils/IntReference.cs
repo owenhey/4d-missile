@@ -9,7 +9,7 @@ namespace Scripts.Utils {
         public int Value {
             get {
                 if (_useStartValue && !_accessed) {
-                    _value = _startValue;
+                    SetValue(_startValue);
                     _accessed = true;
                 }
                 return _value;
@@ -21,15 +21,16 @@ namespace Scripts.Utils {
         [SerializeField] private int _startValue;
         [NonSerialized] private bool _accessed = false;
 
-        private void InitValue() {
-            if (_useStartValue) _value = _startValue;
-        }
+        public System.Action<int> OnValueChanged;
         
         public void SetValue(int newValue) {
             _value = newValue;
             OnValueChanged?.Invoke(newValue);
         }
 
-        public static System.Action<int> OnValueChanged;
+        public void Add(int value) {
+            SetValue(Value + value);
+        }
+
     }
 }

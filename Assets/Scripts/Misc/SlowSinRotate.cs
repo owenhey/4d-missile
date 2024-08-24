@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Misc{
-    public class SlowRotate : MonoBehaviour {
+    public class SlowSinRotate : MonoBehaviour {
         [SerializeField] private Vector3 _rotationAmount;
         private void Update() {
             float factor = Mathf.Sin(Time.time);

@@ -156,7 +156,8 @@ MonoBehaviour:
   _explosion: {fileID: 8855126939453577944}
   _model: {fileID: 4358398253473509431}
   _timeToGetThere: 0.75
-  _damageRadius: 1.5
+  _damageRadius: {fileID: 11400000, guid: 23f53ed24d8b65f48a7920ff9116f25e, type: 2}
+  _damage: {fileID: 11400000, guid: 013fecfec58dafd46a16f8cd2cbb2c44, type: 2}
 --- !u!1 &8855126939453577944
 GameObject:
   m_ObjectHideFlags: 0

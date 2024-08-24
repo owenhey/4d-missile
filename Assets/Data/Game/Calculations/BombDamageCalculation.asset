@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48c9a32053fb4c8b9d39828c2be6091c, type: 3}
-  m_Name: Player Speed Level
+  m_Script: {fileID: 11500000, guid: 873b9b438b2344a59b933233321f4f10, type: 3}
+  m_Name: BombDamageCalculation
   m_EditorClassIdentifier: 
-  _value: 6
-  _useStartValue: 1
-  _startValue: 5
+  _baseBombDamage: 10
+  _bombDamageLevel: {fileID: 11400000, guid: 58efbc36ac8eebc43992f5cf97859611, type: 2}

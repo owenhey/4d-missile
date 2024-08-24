@@ -16,7 +16,12 @@ namespace Scripts.UI{
         [SerializeField] private Toggle _toggle;
         public Toggle Toggle => _toggle;
 
+        private UpgradeDefinition _upgradeShowing;
+        public UpgradeDefinition GetUpgradeShowing() => _upgradeShowing;
+        
         public void Setup(UpgradeDefinition upgradeDef) {
+            _upgradeShowing = upgradeDef;
+            
             _optionTitleField.text = upgradeDef.UpgradeName;
             _costField.text = "Credits: " + upgradeDef.Cost;
             _iconImage.sprite = upgradeDef.Icon;
@@ -24,7 +29,6 @@ namespace Scripts.UI{
         
         public void ShowSelected(bool selected) {
             _selectedImage.gameObject.SetActive(selected);
-            _parentBehavior.OnOptionClick();
         }
     }
 }

@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using Scripts.Utils;
 
 namespace Scripts.Core.Player {
     public class PlayerRotateWithMovement : MonoBehaviour {
@@ -24,9 +25,9 @@ namespace Scripts.Core.Player {
 
             transform.eulerAngles = new Vector3(15, 0, _currentXVel * -3.5f);
 
-            float upDownMultiplier = Utils.Helpers.RemapClamp(yVelocity, -10, 10, 0, 1.0f);
+            float upDownMultiplier = Helpers.RemapClamp(yVelocity, -10, 10, 0, 1.0f);
             if (yVelocity < -5) upDownMultiplier = 0;
-            float leftRightMultiplier = Utils.Helpers.RemapClamp(Mathf.Abs(xVelocity), 0, 15, 0, 1.0f);
+            float leftRightMultiplier = Helpers.RemapClamp(Mathf.Abs(xVelocity), 0, 15, 0, 1.0f);
             
             ParticleSystem.EmissionModule emission = _particleSystem.emission;
             emission.rateOverDistanceMultiplier = 20 * upDownMultiplier + 20 * leftRightMultiplier;

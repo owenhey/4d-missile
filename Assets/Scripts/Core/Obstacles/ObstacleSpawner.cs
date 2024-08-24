@@ -6,10 +6,10 @@ using UnityEngine;
 namespace Scripts.Core.Obstacles {
     public class ObstacleSpawner : MonoBehaviour {
         [SerializeField] private ObstacleBehavior _prefab;
-        [SerializeField] private FloatReference _obstacleSpawnDistance;
+        [SerializeField] private FloatReference _objectSpawnDistance;
 
         private void Start() {
-            transform.position = new Vector3(0, 0, _obstacleSpawnDistance.Value);
+            transform.position = new Vector3(0, 0, _objectSpawnDistance.Value);
         }
         
         public void Spawn(bool finishLine) {
@@ -18,7 +18,7 @@ namespace Scripts.Core.Obstacles {
         }
 
         public float GetObstacleSpawnDistance() {
-            return _obstacleSpawnDistance.Value;
+            return _objectSpawnDistance.Value;
         }
 
         public void DestroyAllObstacles() {

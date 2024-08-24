@@ -62,9 +62,6 @@ namespace Scripts.Core.Player {
                 Vector3 directionFrom0 = Vector3.ClampMagnitude(hit.point, _validRadius.Value);
                 float maxSpeed = Input.GetKey(KeyCode.Space) ? 1.0f : _speedCalculator.GetSpeed();
                 float acceleration = _accelerationCalculator.GetAcceleration();
-                Debug.Log($"Max speed: {maxSpeed}");
-                Debug.Log($"Max acceleration: {acceleration}");
-                
                 
                 _playerTrans.position = Vector3.SmoothDamp(_playerTrans.position, directionFrom0, ref _playerVel, acceleration, maxSpeed);
                 _mousePos.position = directionFrom0;

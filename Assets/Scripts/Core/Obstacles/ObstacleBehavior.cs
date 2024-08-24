@@ -15,7 +15,6 @@ namespace Scripts.Core.Obstacles {
 
         [SerializeField] private bool _hitPlayer = false;
 
-        [SerializeField] private FloatReference _playerSpeed;
         [SerializeField] private FloatReference _obstacleRotationSpeed;
 
         public static Action<bool> OnObstaclePass;
@@ -44,11 +43,7 @@ namespace Scripts.Core.Obstacles {
         }
         
         public void Update() {
-            _trans.position += new Vector3(0, 0, -_playerSpeed.Value * Time.deltaTime);
             _trans.Rotate(0, 0, _obstacleRotationSpeed.Value * Time.deltaTime * _randomRotateDirection);
-            if (_trans.position.z < -10) {
-                Destroy(gameObject);
-            }
         }
 
         public void CollideWithPlayer() {

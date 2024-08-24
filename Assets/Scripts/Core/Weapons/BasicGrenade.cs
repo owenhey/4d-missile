@@ -9,7 +9,8 @@ namespace Scripts.Core.Weapons {
         [SerializeField] private GameObject _explosion;
         [SerializeField] private GameObject _model;
         [SerializeField] private float _timeToGetThere;
-        [SerializeField] private float _damageRadius;
+        [SerializeField] private BombRadiusCalculation _damageRadius;
+        [SerializeField] private BombDamageCalculation _damage;
 
         private Vector3 _startPos;
         private Vector3 _endPos;
@@ -67,17 +68,17 @@ namespace Scripts.Core.Weapons {
         }
 
         private void DamageInArea() {
-            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, _damageRadius, PlayerWeapons.HitColliders, Enemy.EnemyMask);
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, _damageRadius.GetBombRadius(), PlayerWeapons.HitColliders, Enemy.EnemyMask);
             for (int i = 0; i < numColliders; i++) {
                 if(PlayerWeapons.HitColliders[i].TryGetComponent<Enemy>(out Enemy e)){
-                    e.Damage(100);
+                    e.Damage(_damage.GetBombDamage());
                 }
             }
         }
         
         #if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
-            Gizmos.DrawSphere(transform.position, _damageRadius);
+            Gizmos.DrawSphere(transform.position, _damageRadius.GetBombRadius());
         }
 #endif
     }

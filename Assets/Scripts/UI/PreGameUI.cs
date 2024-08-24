@@ -25,17 +25,8 @@ namespace Scripts.UI {
             }
             
             _optionsToggleGroup.SetAllTogglesOff();
-            RefreshNextButtonEnabled();
         }
 
-        public void OnOptionClick() {
-            RefreshNextButtonEnabled();
-        }
-
-        private void RefreshNextButtonEnabled() {
-            _nextButton.interactable = _optionsToggleGroup.AnyTogglesOn();
-        }
-        
         private void Awake() {
             _nextButton.onClick.AddListener(OnNextClick);
             GameManager.OnGameStateChange += HandleGameStateChange;
@@ -53,7 +44,20 @@ namespace Scripts.UI {
         }
 
         private void OnNextClick() {
+            TryGiveUpgrade();
+            
             GameManager.ChangeGameState(GameState.Game);
+        }
+
+        private void TryGiveUpgrade() {
+            // See if any of the toggles are on
+            for (int i = 0; i < _upgradeOptionUIs.Count; i++) {
+                var upgradeOptionUI = _upgradeOptionUIs[i];
+                if (upgradeOptionUI.Toggle.isOn) {
+                    upgradeOptionUI.GetUpgradeShowing().Upgrade(1);
+                    break;
+                }
+            }
         }
     }
 }

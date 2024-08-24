@@ -4,6 +4,7 @@ namespace Scripts.Core.Level {
         public float EndingSpeed;
         
         public float[] Obstacles;
+        public float[] Credits;
         
     }
 }
