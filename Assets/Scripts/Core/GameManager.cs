@@ -23,7 +23,7 @@ namespace Scripts.Core {
         }
 
         private void OnGame() {
-            _levelManager.PlayTestLevel();
+            _levelManager.PlayCurrentLevel();
         }
         
         private void Start() {

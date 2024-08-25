@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Scripts.UI{
     public class UpgradeOptionUI : MonoBehaviour {
-        [SerializeField] private PreGameUI _parentBehavior;
+        [SerializeField] private CanvasGroup _cg;
         [SerializeField] private TextMeshProUGUI _optionTitleField;
         [SerializeField] private Image _iconImage;
         [SerializeField] private TextMeshProUGUI _costField;
@@ -19,12 +19,15 @@ namespace Scripts.UI{
         private UpgradeDefinition _upgradeShowing;
         public UpgradeDefinition GetUpgradeShowing() => _upgradeShowing;
         
-        public void Setup(UpgradeDefinition upgradeDef) {
+        public void Setup(UpgradeDefinition upgradeDef, int playerCredits) {
             _upgradeShowing = upgradeDef;
             
             _optionTitleField.text = upgradeDef.UpgradeName;
             _costField.text = "Credits: " + upgradeDef.Cost;
             _iconImage.sprite = upgradeDef.Icon;
+
+            bool canPurchase = playerCredits > upgradeDef.Cost;
+            _cg.interactable = canPurchase;
         }
         
         public void ShowSelected(bool selected) {

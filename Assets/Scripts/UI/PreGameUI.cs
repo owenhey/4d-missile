@@ -16,12 +16,13 @@ namespace Scripts.UI {
         [Header("Upgrade Section")] 
         [SerializeField] private List<UpgradeOptionUI> _upgradeOptionUIs;
         [SerializeField] private ToggleGroup _optionsToggleGroup;
+        [SerializeField] private IntReference _playerCredits;
         
         private void HandleShopRefresh(UpgradeDefinition[] upgrades) {
             _upgradeOptionUIs.EnsureEnoughElementsAndSetActive(upgrades.Length);
 
             for (int i = 0; i < upgrades.Length; i++) {
-                _upgradeOptionUIs[i].Setup(upgrades[i]);
+                _upgradeOptionUIs[i].Setup(upgrades[i], _playerCredits.Value);
             }
             
             _optionsToggleGroup.SetAllTogglesOff();
@@ -54,7 +55,7 @@ namespace Scripts.UI {
             for (int i = 0; i < _upgradeOptionUIs.Count; i++) {
                 var upgradeOptionUI = _upgradeOptionUIs[i];
                 if (upgradeOptionUI.Toggle.isOn) {
-                    upgradeOptionUI.GetUpgradeShowing().Upgrade(1);
+                    _shopManager.PurchaseUpgrade(upgradeOptionUI.GetUpgradeShowing());
                     break;
                 }
             }

@@ -14,7 +14,8 @@ namespace Scripts.Core.Level{
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private FloatReference _playerSpeed;
         [SerializeField] private GameObject _player;
-
+        [SerializeField] private IntReference _currentLevel;
+        
         private LevelData _levelData;
         
         private float _obstacleDistanceTraveled;
@@ -27,13 +28,8 @@ namespace Scripts.Core.Level{
 
         public float PercentThroughLevel { get; private set; }
 
-        public void PlayTestLevel() {
-            LevelData levelData = new() {
-                StartingSpeed = 10,
-                EndingSpeed = 20,
-                Obstacles = CreateEvenlySpacedArray(0, 40, 50),
-                Credits = CreateEvenlySpacedArray(20, 80, 24)
-            };
+        public void PlayCurrentLevel() {
+            var levelData = LevelFactory.GenerateLevel(_currentLevel.Value);
             PlayLevel(levelData);
         }
         
@@ -50,7 +46,7 @@ namespace Scripts.Core.Level{
             
             _player.SetActive(true);
         }
-
+        
         private void Update() {
             _obstacleDistanceTraveled += Time.deltaTime * _playerSpeed.Value;
             _creditDistanceTraveled += Time.deltaTime * _playerSpeed.Value;
@@ -104,16 +100,8 @@ namespace Scripts.Core.Level{
         private void AfterPassFinish() {
             Debug.Log("You win!");
             _obstacleSpawner.DestroyAllObstacles();
+            _currentLevel.Add(1);
             GameManager.ChangeGameState(GameState.PreGame);
-        }
-
-        private float[] CreateEvenlySpacedArray(float startAt, float distance, int number) {
-            float[] array = new float[number];
-            for (int i = 0; i < array.Length; i++) {
-                array[i] = startAt + distance * i;
-            }
-
-            return array;
         }
 
         private void HandleGameStateChange(GameState state) {

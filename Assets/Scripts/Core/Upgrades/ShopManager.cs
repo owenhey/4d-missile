@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using Scripts.Utils;
 using UnityEngine;
 
 namespace Scripts.Core.Upgrades {
     public class ShopManager : MonoBehaviour {
         [SerializeField] private UpgradeDefinition[] _possibleUpgrades;
-
+        [SerializeField] private IntReference _playerCredits;
+        
         public System.Action<UpgradeDefinition[]> OnShopRefresh;
         
         public void RefreshShop() {
@@ -20,6 +22,11 @@ namespace Scripts.Core.Upgrades {
             }
             
             OnShopRefresh?.Invoke(chosenUpgrades.ToArray());
+        }
+
+        public void PurchaseUpgrade(UpgradeDefinition upgrade) {
+            upgrade.Upgrade(1);
+            _playerCredits.Add(-upgrade.Cost);
         }
     }
 }
