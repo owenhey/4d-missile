@@ -1014,8 +1014,9 @@ MonoBehaviour:
   _speedCalculator: {fileID: 11400000, guid: 8b7f55613594b3644bafbbc296a32a15, type: 2}
   _accelerationCalculator: {fileID: 11400000, guid: f428c5dd0d290be43b7d34204a736d21,
     type: 2}
-  Health: 0
-  MaxHealth: 100
+  _maxHealthCalculator: {fileID: 11400000, guid: f1eeef5f337d657469bf173d3f43393c,
+    type: 2}
+  _playerHealth: {fileID: 11400000, guid: 66aa8a3b95b762146983449678aafa35, type: 2}
 --- !u!136 &218139525
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7022,9 +7023,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2cfcf4171c49bd9248fcd846ef405f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movement: {fileID: 218139524}
   _progressBarRT: {fileID: 150405705}
   _totalProgressBarWidth: 490
+  _playerMaxHealth: {fileID: 11400000, guid: f1eeef5f337d657469bf173d3f43393c, type: 2}
+  _playerHealth: {fileID: 11400000, guid: 66aa8a3b95b762146983449678aafa35, type: 2}
 --- !u!114 &581060192
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ namespace Scripts.Core.Obstacles {
 
         public void CollideWithPlayer() {
             _hitPlayer = true;
-            _playerMovement.TakeDamage(35);
+            _playerMovement.TakeDamage(20);
         }
 
         public void OnPassedPlayer() {

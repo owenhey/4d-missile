@@ -12,6 +12,10 @@ namespace Scripts.Core.Player {
         [Header("Stat Calcs")]
         [SerializeField] private PlayerSpeedCalculation _speedCalculator;
         [SerializeField] private PlayerAccCalculation _accelerationCalculator;
+        [SerializeField] private MaxHealthCalculation _maxHealthCalculator;
+        
+        [Header("Values")]
+        [SerializeField] private FloatReference _playerHealth;
         
         private Transform _playerTrans;
         private Camera _camera;
@@ -21,17 +25,10 @@ namespace Scripts.Core.Player {
         public static System.Action<float> OnTakeDamage;
         
 
-        [ReadOnly] public float Health;
-        public float MaxHealth = 100;
-
         private void Awake() {
             _playerTrans = transform;
             _camera = Camera.main;
-            Health = MaxHealth;
-
-            for (int i = 1; i < 20; i++) {
-                _accelerationCalculator.Calc(i);
-            }
+            _playerHealth.SetValue(_maxHealthCalculator.GetMaxHealth());
         }
 
         private void OnEnable() {
@@ -45,9 +42,9 @@ namespace Scripts.Core.Player {
         }
 
         public void TakeDamage(float amount) {
-            Health -= amount;
+            _playerHealth.Add(-amount);
             OnTakeDamage?.Invoke(amount);
-            if (Health < 0) {
+            if (_playerHealth.Value < 0) {
                 Die();
             }
         }

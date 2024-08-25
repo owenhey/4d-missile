@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48c9a32053fb4c8b9d39828c2be6091c, type: 3}
-  m_Name: Player Acc Level
+  m_Script: {fileID: 11500000, guid: fe296c216093449db4e96518fc78bba9, type: 3}
+  m_Name: MaxHealthCalculation
   m_EditorClassIdentifier: 
-  _value: 1
-  _useStartValue: 1
-  _startValue: 1
+  _baseMaxHealth: 50
+  _maxHealthLevel: {fileID: 11400000, guid: 6ae23f73f666a98418cc5b9ec51f8e0c, type: 2}

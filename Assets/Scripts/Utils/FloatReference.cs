@@ -30,6 +30,10 @@ namespace Scripts.Utils {
             OnValueChanged?.Invoke(newValue);
         }
 
+        public void Add(float delta) {
+            SetValue(Value + delta);
+        }
+
         public static System.Action<float> OnValueChanged;
     }
 }

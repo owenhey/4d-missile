@@ -16,13 +16,5 @@ namespace Scripts.Core.Player {
             
             return _baseAcc * final;
         }
-
-        public void Calc(int v) {
-            float x = v;
-            float exp = (x - 1) * .25f;
-            float bottom = 1 + (Mathf.Exp(exp));
-            float final = 2 * (1 / bottom);
-            Debug.Log($"V: {v}, value is: {final}");
-        }
     }
 }
