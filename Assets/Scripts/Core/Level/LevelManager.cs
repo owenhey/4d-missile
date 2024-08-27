@@ -17,13 +17,12 @@ namespace Scripts.Core.Level{
         [SerializeField] private IntReference _currentLevel;
         
         private LevelData _levelData;
-        
-        private float _obstacleDistanceTraveled;
-        private int _obstacleIndex;
-        
-        private float _creditDistanceTraveled;
-        private int _creditIndex;
-        
+
+        private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
+        private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
+        private SpawnAfterDistance<FloatSpawnable> _enemiesSpawnBehav;
+
+        private float _distanceTraveled;
         private float _totalDistance;
 
         public float PercentThroughLevel { get; private set; }
@@ -35,58 +34,44 @@ namespace Scripts.Core.Level{
         
         public void PlayLevel(LevelData levelData) {
             _levelData = levelData;
-            _totalDistance = levelData.Obstacles[^1] + _obstacleSpawner.GetObstacleSpawnDistance();
+            _totalDistance = levelData.Obstacles[^1].Value + _obstacleSpawner.GetObstacleSpawnDistance();
+            _distanceTraveled = 0;
             _playerSpeed.SetValue(levelData.StartingSpeed);
             
-            _obstacleDistanceTraveled = 0;
-            _obstacleIndex = 0;
-            
-            _creditIndex = 0;
-            _creditDistanceTraveled = 0;
+            // Setup spawners
+            _obstacleSpawnBehav = new (levelData.Obstacles, SpawnObstacle);
+            _creditsSpawnBehav = new (levelData.Credits, SpawnCredits);
+            _enemiesSpawnBehav = new (levelData.Enemies, SpawnEnemy);
             
             _player.SetActive(true);
         }
         
         private void Update() {
-            _obstacleDistanceTraveled += Time.deltaTime * _playerSpeed.Value;
-            _creditDistanceTraveled += Time.deltaTime * _playerSpeed.Value;
-            PercentThroughLevel = _obstacleDistanceTraveled / _totalDistance;
+            float _disThisFrame = _playerSpeed.Value * Time.deltaTime;
             
-            EvaluateSpeed();
-            CheckForObstacleSpawn();
-            CheckForCreditSpawn();
+            _distanceTraveled += _disThisFrame;
+            PercentThroughLevel = _distanceTraveled / _totalDistance;
+            
+            _obstacleSpawnBehav.Advance(_disThisFrame);
+            _creditsSpawnBehav.Advance(_disThisFrame);
+            _enemiesSpawnBehav.Advance(_disThisFrame);
+            
+            UpdateSpeed();
         }
 
-        private void CheckForObstacleSpawn() {
-            if (_obstacleIndex >= _levelData.Obstacles.Length) return;
-            
-            float nextObstacleAt = _levelData.Obstacles[_obstacleIndex];
-
-            bool traveledEnoughForNextObstacle = _obstacleDistanceTraveled > nextObstacleAt;
-            if (traveledEnoughForNextObstacle) {
-                bool isFinishLine = _obstacleIndex == _levelData.Obstacles.Length - 1;
-                _obstacleSpawner.Spawn(isFinishLine);
-                if (_obstacleIndex % 3 == 0) {
-                    _enemySpawner.Spawn();
-                }
-
-                _obstacleIndex++;
-            }
+        private void SpawnObstacle(ObstacleSpawnable spawnable) {
+            _obstacleSpawner.Spawn(spawnable.IsFinishLine);
         }
         
-        private void CheckForCreditSpawn() {
-            if (_creditIndex >= _levelData.Credits.Length) return;
-            
-            float nextCreditAt = _levelData.Credits[_creditIndex];
-
-            bool spawnCredit = _creditDistanceTraveled > nextCreditAt;
-            if (spawnCredit) {
-                _creditSpawner.Spawn();
-                _creditIndex++;
-            }
+        private void SpawnCredits(FloatSpawnable spawnable) {
+            _creditSpawner.Spawn();
         }
 
-        private void EvaluateSpeed() {
+        private void SpawnEnemy(FloatSpawnable spawnable) {
+            _enemySpawner.Spawn();
+        }
+
+        private void UpdateSpeed() {
             float newSpeed = Mathf.Lerp(_levelData.StartingSpeed, _levelData.EndingSpeed, PercentThroughLevel);
             _playerSpeed.SetValue(newSpeed);
         }

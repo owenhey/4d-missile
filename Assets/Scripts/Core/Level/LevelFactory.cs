@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using Scripts.Misc;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Scripts.Core.Level {
     public static class LevelFactory {
@@ -20,12 +22,14 @@ namespace Scripts.Core.Level {
             var speed = GetSpeeds(level, modifiers);
             var obstacles = GetObstacles(level, modifiers);
             var credits = GetCredits(obstacles);
+            var enemies = GetEnemies(level, modifiers);
                 
             LevelData levelData = new() {
                 StartingSpeed = speed.startSpeed,
                 EndingSpeed = speed.endSpeed,
                 Obstacles = obstacles,
-                Credits = credits
+                Credits = credits,
+                Enemies = enemies,
             };
             Debug.Log(levelData);
             return levelData;
@@ -58,31 +62,41 @@ namespace Scripts.Core.Level {
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
             int startSpeed = (level - 1) * 5 + 15;
-            int endSpeed = startSpeed * 2;
+            int endSpeed = (int)(startSpeed * 1.5f);
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
             float factor = modifiers.HasFlag(LevelModifiers.Faster) ? 1.5f : 1.0f;
             return ((int)(startSpeed * factor), (int)(endSpeed * factor));
         }
 
-        private static float[] GetObstacles(int level, LevelModifiers modifiers) {
+        private static ObstacleSpawnable[] GetObstacles(int level, LevelModifiers modifiers) {
+            FloatSpawnable[] array;
             if (modifiers.HasFlag(LevelModifiers.Longer)) {
-                return CreateEvenlySpacedArray(0, 40, 30 + (level - 1) * 4);
+                array = CreateEvenlySpacedArray(0, 40, 30 + (level - 1) * 4);
             }
             else {
-                return CreateEvenlySpacedArray(0, 40, 20 + (level - 1) * 2);
+                array = CreateEvenlySpacedArray(0, 40, 20 + (level - 1) * 2);
             }
+
+            List<ObstacleSpawnable> _obsSpawnables = new List<ObstacleSpawnable>(array.Length);
+            for (int i = 0; i < array.Length; i++) {
+                _obsSpawnables.Add(new ObstacleSpawnable(array[i].Value, i == array.Length - 1));
+            }
+
+            return _obsSpawnables.ToArray();
         }
 
-        private static float[] GetCredits(float[] obstacles) {
+        public static FloatSpawnable[] GetCredits<T>(IEnumerable<T> obstacles) where T : IDataSpawnable{
             const float CREDIT_CHANCE = .5f;
             const float DOUBLE_CREDIT_CHANCE = .25f;
             const float TRIPLE_CREDIT_CHANCE = .1f;
             
-            List<float> credits = new();
-            for (int i = 1; i < obstacles.Length - 1; i++) {
-                float obstacleStart = obstacles[i];
-                float nextObstacle = obstacles[i + 1];
+            List<FloatSpawnable> credits = new();
+            // This just prevents from enumerating it many times
+            var dataSpawnables = obstacles as T[] ?? obstacles.ToArray();
+            for (int i = 1; i < dataSpawnables.Count() - 1; i++) {
+                float obstacleStart = dataSpawnables.ElementAt(i).GetDistance();
+                float nextObstacle = dataSpawnables.ElementAt(i + 1).GetDistance();
 
                 if (Ran01 < CREDIT_CHANCE) {
                     if (Ran01 < TRIPLE_CREDIT_CHANCE) {
@@ -109,9 +123,22 @@ namespace Scripts.Core.Level {
 
             return credits.ToArray();
         }
-        
-        private static float[] CreateEvenlySpacedArray(float startAt, float distance, int number) {
-            float[] array = new float[number];
+
+        private static FloatSpawnable[] GetEnemies(int level, LevelModifiers modifiers) {
+            if (level == 1) {
+                return Array.Empty<FloatSpawnable>();
+            }
+
+            int numEnemies = level;
+            if (modifiers.HasFlag(LevelModifiers.MoreEnemies)) {
+                numEnemies = (int)(numEnemies * 1.5f);
+            }
+
+            return CreateEvenlySpacedArray(100, 100, numEnemies);
+        }
+
+        private static FloatSpawnable[] CreateEvenlySpacedArray(float startAt, float distance, int number) {
+            FloatSpawnable[] array = new FloatSpawnable[number];
             for (int i = 0; i < array.Length; i++) {
                 array[i] = startAt + distance * i;
             }
@@ -120,6 +147,27 @@ namespace Scripts.Core.Level {
         }
 
         private static float Ran01 => Random.Range(0.0f, 1.0f);
+    }
+
+    public class FloatSpawnable : IDataSpawnable {
+        public static implicit operator FloatSpawnable(float f) => new FloatSpawnable(f);
         
+        public float Value { get; private set; }
+
+        public FloatSpawnable(float f) {
+            Value = f;
+        }
+        
+        public float GetDistance() {
+            return Value;
+        }
+    }
+
+    public class ObstacleSpawnable : FloatSpawnable {
+        public bool IsFinishLine { get; private set; }
+
+        public ObstacleSpawnable(float dis, bool isFinishLine) : base(dis) {
+            IsFinishLine = isFinishLine;
+        }
     }
 }

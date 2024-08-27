@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Scripts.Utils;
@@ -28,7 +29,17 @@ namespace Scripts.Core.Player {
         private void Awake() {
             _playerTrans = transform;
             _camera = Camera.main;
-            _playerHealth.SetValue(_maxHealthCalculator.GetMaxHealth());
+            GameManager.OnGameStateChange += OnGameStateChange;
+        }
+
+        private void OnDestroy() {
+            GameManager.OnGameStateChange -= OnGameStateChange;
+        }
+
+        private void OnGameStateChange(GameState state) {
+            if (state == GameState.Game) {
+                _playerHealth.SetValue(_maxHealthCalculator.GetMaxHealth());
+            }
         }
 
         private void OnEnable() {

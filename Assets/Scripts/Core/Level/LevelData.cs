@@ -3,9 +3,9 @@ namespace Scripts.Core.Level {
         public float StartingSpeed;
         public float EndingSpeed;
         
-        public float[] Obstacles;
-        public float[] Credits;
-        public float[] Enemies;
+        public ObstacleSpawnable[] Obstacles;
+        public FloatSpawnable[] Credits;
+        public FloatSpawnable[] Enemies;
 
         public override string ToString() {
             return $"Level: Starting Speed: {StartingSpeed}\nEnding Speed: {EndingSpeed}\nObstacle Count:{Obstacles.Length}";
