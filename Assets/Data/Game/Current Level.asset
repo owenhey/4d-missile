@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c9a32053fb4c8b9d39828c2be6091c, type: 3}
   m_Name: Current Level
   m_EditorClassIdentifier: 
-  _value: 4
+  _value: 5
   _useStartValue: 1
-  _startValue: 4
+  _startValue: 10

@@ -71,6 +71,9 @@ namespace Scripts.Core.Level {
         }
 
         private static ObstacleSpawnable[] GetObstacles(int level, LevelModifiers modifiers) {
+            // return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
+            
+            
             FloatSpawnable[] array;
             bool hasLongerModifier = modifiers.HasFlag(LevelModifiers.Longer);
             if (hasLongerModifier) {

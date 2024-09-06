@@ -17,10 +17,11 @@ namespace Scripts.Core.Player {
         
         [Header("Values")]
         [SerializeField] private FloatReference _playerHealth;
+
+        [ReadOnly] public bool CanMoveWithMouse = true;
         
         private Transform _playerTrans;
         private Camera _camera;
-
         private Vector3 _playerVel;
 
         public static System.Action<float> OnTakeDamage;
@@ -65,6 +66,8 @@ namespace Scripts.Core.Player {
         }
 
         private void Update() {
+            if (!CanMoveWithMouse) return;
+            
             RaycastHit hit;
             if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, 50, _gamePlaneMask)) {
                 Vector3 directionFrom0 = Vector3.ClampMagnitude(hit.point, _validRadius.Value);

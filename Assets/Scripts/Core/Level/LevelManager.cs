@@ -15,6 +15,7 @@ namespace Scripts.Core.Level{
         [SerializeField] private FloatReference _playerSpeed;
         [SerializeField] private GameObject _player;
         [SerializeField] private IntReference _currentLevel;
+        [SerializeField] private FloatReference _endAnimationTime;
         
         private LevelData _levelData;
 
@@ -25,6 +26,8 @@ namespace Scripts.Core.Level{
         private float _distanceTraveled;
         private float _totalDistance;
 
+        public Action OnWin;
+
         public float PercentThroughLevel { get; private set; }
 
         public void PlayCurrentLevel() {
@@ -32,7 +35,7 @@ namespace Scripts.Core.Level{
             PlayLevel(levelData);
         }
         
-        public void PlayLevel(LevelData levelData) {
+        private void PlayLevel(LevelData levelData) {
             _levelData = levelData;
             _totalDistance = levelData.Obstacles[^1].Value + _obstacleSpawner.GetObstacleSpawnDistance();
             _distanceTraveled = 0;
@@ -83,8 +86,13 @@ namespace Scripts.Core.Level{
         }
 
         private void AfterPassFinish() {
-            Debug.Log("You win!");
+            OnWin?.Invoke();
             _obstacleSpawner.DestroyAllObstacles();
+            
+            Invoke(nameof(AdvanceFromLevel), _endAnimationTime.Value);
+        }
+
+        private void AdvanceFromLevel() {
             _currentLevel.Add(1);
             GameManager.ChangeGameState(GameState.PreGame);
         }
