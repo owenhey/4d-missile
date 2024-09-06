@@ -971,7 +971,7 @@ GameObject:
   - component: {fileID: 218139527}
   - component: {fileID: 218139525}
   - component: {fileID: 218139526}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -8539,8 +8539,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8e0cdc6809489797cb6a46425083d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicEnemy: {fileID: 698214792573215763, guid: 1fb71d8c99186934787ac5f658e60c91,
-    type: 3}
+  _possibleEnemies:
+  - {fileID: 698214792573215763, guid: 9d1897bdb30cdd943a9c0f5407653bb5, type: 3}
+  - {fileID: 698214792573215763, guid: 1fb71d8c99186934787ac5f658e60c91, type: 3}
   _playerTrans: {fileID: 218139523}
   _validSpawnRadius: {fileID: 11400000, guid: 0396b655056199042bf88c142205ccf1, type: 2}
 --- !u!1 &1491197430

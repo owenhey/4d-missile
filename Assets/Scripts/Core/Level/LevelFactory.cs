@@ -41,7 +41,7 @@ namespace Scripts.Core.Level {
                 numModifiers = (level - 3) / 4 + 1;
             }
             numModifiers = Mathf.Min(numModifiers, 4);
-            Debug.Log($"num modifiers: {numModifiers}");
+            Debug.Log($"Num modifiers: {numModifiers}");
             
             List<LevelModifiers> possibleMods = System.Enum.GetValues(typeof(LevelModifiers)).Cast<LevelModifiers>().ToList();
             List<LevelModifiers> chosenMods = new(possibleMods.Count);
@@ -65,13 +65,14 @@ namespace Scripts.Core.Level {
             int endSpeed = (int)(startSpeed * 1.5f);
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
-            float factor = modifiers.HasFlag(LevelModifiers.Faster) ? 1.5f : 1.0f;
+            float factor = hasFasterModifier ? 1.3f : 1.0f;
             return ((int)(startSpeed * factor), (int)(endSpeed * factor));
         }
 
         private static ObstacleSpawnable[] GetObstacles(int level, LevelModifiers modifiers) {
             FloatSpawnable[] array;
-            if (modifiers.HasFlag(LevelModifiers.Longer)) {
+            bool hasLongerModifier = modifiers.HasFlag(LevelModifiers.Longer);
+            if (hasLongerModifier) {
                 array = CreateEvenlySpacedArray(0, 40, 30 + (level - 1) * 4);
             }
             else {
