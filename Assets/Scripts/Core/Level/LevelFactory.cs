@@ -21,8 +21,9 @@ namespace Scripts.Core.Level {
             Debug.Log("mods: " + modifiers);
             var speed = GetSpeeds(level, modifiers);
             var obstacles = GetObstacles(level, modifiers);
+            float totalDistance = obstacles[^1].GetDistance();
             var credits = GetCredits(obstacles);
-            var enemies = GetEnemies(level, modifiers);
+            var enemies = GetEnemies(level, totalDistance, modifiers);
                 
             LevelData levelData = new() {
                 StartingSpeed = speed.startSpeed,
@@ -61,11 +62,11 @@ namespace Scripts.Core.Level {
         }
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
-            int startSpeed = (level - 1) * 5 + 15;
-            int endSpeed = (int)(startSpeed * 1.5f);
+            int startSpeed = (level - 1) * 3 + 10;
+            int endSpeed = (int)(startSpeed * 1.4f);
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
-            float factor = hasFasterModifier ? 1.3f : 1.0f;
+            float factor = hasFasterModifier ? 1.4f : 1.0f;
             return ((int)(startSpeed * factor), (int)(endSpeed * factor));
         }
 
@@ -125,7 +126,7 @@ namespace Scripts.Core.Level {
             return credits.ToArray();
         }
 
-        private static FloatSpawnable[] GetEnemies(int level, LevelModifiers modifiers) {
+        private static FloatSpawnable[] GetEnemies(int level, float totalDistance, LevelModifiers modifiers) {
             if (level == 1) {
                 return Array.Empty<FloatSpawnable>();
             }
@@ -135,7 +136,14 @@ namespace Scripts.Core.Level {
                 numEnemies = (int)(numEnemies * 1.5f);
             }
 
-            return CreateEvenlySpacedArray(100, 100, numEnemies);
+            const float startCap = 100;
+            const float endCap = 200;
+
+            float totalValidSpawnSpace = totalDistance - (startCap + endCap);
+            float spaceBetweenEnemies =  totalValidSpawnSpace / (numEnemies + 1);
+            Debug.Log($"Total distance: {totalDistance}, numenmies: {numEnemies}, space between : {spaceBetweenEnemies}");
+
+            return CreateEvenlySpacedArray(100, spaceBetweenEnemies, numEnemies);
         }
 
         private static FloatSpawnable[] CreateEvenlySpacedArray(float startAt, float distance, int number) {
