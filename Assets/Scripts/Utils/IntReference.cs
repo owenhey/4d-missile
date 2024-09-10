@@ -9,7 +9,7 @@ namespace Scripts.Utils {
         public int Value {
             get {
                 if (_useStartValue && !_accessed) {
-                    SetValue(_startValue);
+                    _value = _startValue;
                     _accessed = true;
                 }
                 return _value;

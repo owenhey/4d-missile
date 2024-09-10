@@ -5,6 +5,7 @@ using Scripts.Core.Level;
 using Scripts.Core.Upgrades;
 using Scripts.Misc;
 using Scripts.Utils;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ namespace Scripts.UI {
     public class PreGameUI : MonoBehaviour {
         [SerializeField] private Button _nextButton;
         [SerializeField] private ShopManager _shopManager;
+        [SerializeField] private IntReference _currentLevel;
+        
+        [Header("Text Section")] 
+        [SerializeField] private TextMeshProUGUI _levelText;
 
         [Header("Upgrade Section")] 
         [SerializeField] private List<UpgradeOptionUI> _upgradeOptionUIs;
@@ -42,23 +47,11 @@ namespace Scripts.UI {
         private void HandleGameStateChange(GameState newState) {
             bool isPreGame = newState == GameState.PreGame;
             gameObject.SetActive(isPreGame);
+            _levelText.text = $"Level {_currentLevel.Value} of 12";
         }
-
+        
         private void OnNextClick() {
-            TryGiveUpgrade();
-            
             GameManager.ChangeGameState(GameState.Game);
-        }
-
-        private void TryGiveUpgrade() {
-            // See if any of the toggles are on
-            for (int i = 0; i < _upgradeOptionUIs.Count; i++) {
-                var upgradeOptionUI = _upgradeOptionUIs[i];
-                if (upgradeOptionUI.Toggle.isOn) {
-                    _shopManager.PurchaseUpgrade(upgradeOptionUI.GetUpgradeShowing());
-                    break;
-                }
-            }
         }
     }
 }
