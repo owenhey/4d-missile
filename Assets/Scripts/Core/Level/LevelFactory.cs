@@ -20,7 +20,8 @@ namespace Scripts.Core.Level {
             var modifiers = GenerateModifiers(level);
             Debug.Log("mods: " + modifiers);
             var speed = GetSpeeds(level, modifiers);
-            var obstacles = GetObstacles(level, modifiers);
+            float averageSpeed = (speed.startSpeed + speed.endSpeed) * 1.5f; 
+            var obstacles = GetObstacles(level, averageSpeed, modifiers);
             float totalDistance = obstacles[^1].GetDistance();
             var credits = GetCredits(obstacles);
             var enemies = GetEnemies(level, totalDistance, modifiers);
@@ -39,7 +40,7 @@ namespace Scripts.Core.Level {
         private static LevelModifiers GenerateModifiers(int level) {
             int numModifiers = 0;
             if (level >= 3) {
-                numModifiers = (level - 3) / 4 + 1;
+                numModifiers = (level - 3) / 3 + 1;
             }
             numModifiers = Mathf.Min(numModifiers, 4);
             Debug.Log($"Num modifiers: {numModifiers}");
@@ -62,26 +63,22 @@ namespace Scripts.Core.Level {
         }
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
-            int startSpeed = (level - 1) * 3 + 10;
-            int endSpeed = (int)(startSpeed * 1.4f);
+            int startSpeed = (int)((level - 1) * 4.5f) + 10; // Goes from 10 to 65
+            int endSpeed = (int)(startSpeed * 1.4f); 
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
-            float factor = hasFasterModifier ? 1.4f : 1.0f;
-            return ((int)(startSpeed * factor), (int)(endSpeed * factor));
+            float factor = hasFasterModifier ? 1.3f : 1.0f;
+            return (startSpeed, (int)(endSpeed * factor));
         }
 
-        private static ObstacleSpawnable[] GetObstacles(int level, LevelModifiers modifiers) {
-            return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
+        private static ObstacleSpawnable[] GetObstacles(int level, float averageSpeed, LevelModifiers modifiers) {
+            // return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
             
-            
-            FloatSpawnable[] array;
             bool hasLongerModifier = modifiers.HasFlag(LevelModifiers.Longer);
-            if (hasLongerModifier) {
-                array = CreateEvenlySpacedArray(0, 40, 30 + (level - 1) * 4);
-            }
-            else {
-                array = CreateEvenlySpacedArray(0, 40, 20 + (level - 1) * 2);
-            }
+            float totalDistance = averageSpeed * (hasLongerModifier ? 45 : 60);
+            int spaceBetween = 40 + level;
+            int totalObstacles = (int)(totalDistance / spaceBetween);
+            FloatSpawnable[] array = CreateEvenlySpacedArray(level * 10, spaceBetween, totalObstacles);
 
             List<ObstacleSpawnable> _obsSpawnables = new List<ObstacleSpawnable>(array.Length);
             for (int i = 0; i < array.Length; i++) {
@@ -144,7 +141,6 @@ namespace Scripts.Core.Level {
 
             float totalValidSpawnSpace = totalDistance - (startCap + endCap);
             float spaceBetweenEnemies =  totalValidSpawnSpace / (numEnemies + 1);
-            Debug.Log($"Total distance: {totalDistance}, numenmies: {numEnemies}, space between : {spaceBetweenEnemies}");
 
             return CreateEvenlySpacedArray(100, spaceBetweenEnemies, numEnemies);
         }

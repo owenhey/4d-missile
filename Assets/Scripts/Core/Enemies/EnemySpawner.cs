@@ -24,7 +24,8 @@ namespace Scripts.Core.Enemies {
         private void S() {
             var playerPosition = _playerTrans.position;
             var newEnemy = Instantiate(_possibleEnemies.GetRandom(), transform);
-
+            _spawnedEnemies.Add(newEnemy);
+            
             Vector3 spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
             while (true) {
                 float distanceToPlayer = Vector3.Distance(playerPosition, spawnPosition);
@@ -37,7 +38,10 @@ namespace Scripts.Core.Enemies {
         }
 
         private void DestroyAllEnemies() {
-            foreach (var enemy in _spawnedEnemies) {
+            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--) {
+                var enemy = _spawnedEnemies[i];
+                _spawnedEnemies.RemoveAt(i);
+                if(enemy == null) continue;
                 enemy.ForceKill();
             }
         }

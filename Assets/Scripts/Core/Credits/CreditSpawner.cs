@@ -11,11 +11,11 @@ namespace Scripts.Core.Credits {
             Vector3 spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
             spawnPosition.z = _objectSpawnDistance.Value;
             
-            var creditBox = Instantiate(_prefab);
+            var creditBox = Instantiate(_prefab, transform);
             creditBox.transform.position = spawnPosition;
         }
 
-        public void DestroyAllObstacles() {
+        public void DestroyAllCredits() {
             int childCount = transform.childCount;
             for (int i = childCount - 1; i >= 0; i--) {
                 Destroy(transform.GetChild(i).gameObject);

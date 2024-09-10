@@ -76,6 +76,7 @@ namespace Scripts.Core.Player {
             OnPlayerDeath?.Invoke();
             CanMoveWithMouse = false;
             _mousePos.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         private void Update() {

@@ -20,8 +20,7 @@ namespace Scripts.Core.Enemies {
         public static LayerMask PlayerMask = 1 << 8;        
 
         private void Awake() {
-            PlayerTrans = GameObject.FindFirstObjectByType<Movement>().transform;
-            
+            PlayerTrans = GameObject.FindFirstObjectByType<Movement>(FindObjectsInactive.Include).transform;
         }
 
         private void Start() {

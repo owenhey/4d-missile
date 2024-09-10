@@ -43,6 +43,9 @@ namespace Scripts.Core.Level{
             _playerSpeed.SetValue(levelData.StartingSpeed);
             _died = false;
             
+            _obstacleSpawner.DestroyAllObstacles();
+            _creditSpawner.DestroyAllCredits();
+            
             // Setup spawners
             _obstacleSpawnBehav = new (levelData.Obstacles, SpawnObstacle);
             _creditsSpawnBehav = new (levelData.Credits, SpawnCredits);
