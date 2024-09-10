@@ -18,5 +18,11 @@ namespace Scripts.Core.Obstacles.Hiding {
                 slider.Target.DOLocalMove(slider.NewPosition.localPosition, SLIDE_TIME).SetEase(Ease.OutQuad);
             }
         }
+
+        protected override void OnDestroy() {
+            foreach (var slider in _sliders) {
+                slider.Target.DOKill();
+            }
+        }
     }
 }

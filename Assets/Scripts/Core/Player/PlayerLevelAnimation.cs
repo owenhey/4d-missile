@@ -45,9 +45,7 @@ namespace Scripts.Core.Player {
 
         private void PlayEndLevel() {
             _player.CanMoveWithMouse = false;
-            _player.transform.DOMove(_endAnimTransEnd.position, _endAnimationTime.Value).SetEase(Ease.InCubic).OnComplete(()=> {
-                _player.CanMoveWithMouse = true;
-            });
+            _player.transform.DOMove(_endAnimTransEnd.position, _endAnimationTime.Value).SetEase(Ease.InCubic);
         }
     }
 }

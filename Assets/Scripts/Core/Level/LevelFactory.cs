@@ -71,7 +71,7 @@ namespace Scripts.Core.Level {
         }
 
         private static ObstacleSpawnable[] GetObstacles(int level, LevelModifiers modifiers) {
-            // return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
+            return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
             
             
             FloatSpawnable[] array;

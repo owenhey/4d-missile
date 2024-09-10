@@ -8,7 +8,10 @@ namespace Scripts.Misc {
         public float TimeToScale = .25f;
         private void Awake() {
             transform.DOScale(Vector3.one * 1.25f, TimeToScale * .5f).From(0);
-            transform.DOScale(Vector3.zero, TimeToScale).SetDelay(TimeToScale * .5f).SetEase(Ease.InQuad);
+            transform.DOScale(Vector3.zero, TimeToScale).SetDelay(TimeToScale * .5f).SetEase(Ease.InQuad).OnComplete(() => 
+            {
+                Destroy(gameObject);
+            });
         }
     }
 }

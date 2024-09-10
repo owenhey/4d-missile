@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using Scripts.Core.Credits;
 using Scripts.Core.Enemies;
 using Scripts.Core.Obstacles;
+using Scripts.Core.Player;
 using Scripts.Utils;
 using UnityEngine;
 
@@ -25,6 +25,7 @@ namespace Scripts.Core.Level{
 
         private float _distanceTraveled;
         private float _totalDistance;
+        private bool _died; // Keeps track of whether the player has died
 
         public Action OnWin;
 
@@ -40,6 +41,7 @@ namespace Scripts.Core.Level{
             _totalDistance = levelData.Obstacles[^1].Value + _obstacleSpawner.GetObstacleSpawnDistance();
             _distanceTraveled = 0;
             _playerSpeed.SetValue(levelData.StartingSpeed);
+            _died = false;
             
             // Setup spawners
             _obstacleSpawnBehav = new (levelData.Obstacles, SpawnObstacle);
@@ -50,6 +52,8 @@ namespace Scripts.Core.Level{
         }
         
         private void Update() {
+            if (_died) return;
+            
             float _disThisFrame = _playerSpeed.Value * Time.deltaTime;
             
             _distanceTraveled += _disThisFrame;
@@ -79,8 +83,9 @@ namespace Scripts.Core.Level{
             _playerSpeed.SetValue(newSpeed);
         }
 
-        private void SuccessfulObstaclePassHandler(bool isFinishLine) {
-            if (isFinishLine) {
+        private void ObstaclePassHandler(bool isFinishLine) {
+            bool isValidWin = !_died && isFinishLine;
+            if (isValidWin) {
                 AfterPassFinish();
             }
         }
@@ -88,12 +93,12 @@ namespace Scripts.Core.Level{
         private void AfterPassFinish() {
             OnWin?.Invoke();
             _obstacleSpawner.DestroyAllObstacles();
+            _currentLevel.Add(1);
             
             Invoke(nameof(AdvanceFromLevel), _endAnimationTime.Value);
         }
 
         private void AdvanceFromLevel() {
-            _currentLevel.Add(1);
             GameManager.ChangeGameState(GameState.PreGame);
         }
 
@@ -102,14 +107,21 @@ namespace Scripts.Core.Level{
             gameObject.SetActive(isLevel);
         }
         
+        private void HandlePlayerDeath() {
+            _died = true;
+            DOTween.To(()=>_playerSpeed.Value, x => _playerSpeed.SetValue(x), 0, 1.0f);
+        }
+        
         private void Awake() {
-            ObstacleBehavior.OnObstaclePass += SuccessfulObstaclePassHandler;
+            ObstacleBehavior.OnObstaclePass += ObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
+            Movement.OnPlayerDeath += HandlePlayerDeath;
         }
 
         private void OnDestroy() {
-            ObstacleBehavior.OnObstaclePass -= SuccessfulObstaclePassHandler;
-            GameManager.OnGameStateChange += HandleGameStateChange;
+            ObstacleBehavior.OnObstaclePass -= ObstaclePassHandler;
+            GameManager.OnGameStateChange -= HandleGameStateChange;
+            Movement.OnPlayerDeath -= HandlePlayerDeath;
         }
     }
 }

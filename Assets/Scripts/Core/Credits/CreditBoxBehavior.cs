@@ -37,6 +37,10 @@ namespace Scripts.Core.Credits {
             DOTween.To(()=> _rotateSpeed, x=> _rotateSpeed = x, 2500, .4f);
         }
 
+        private void OnDestroy() {
+            transform.DOKill();
+        }
+
         private void Update() {
             RotateAnimation();
         }

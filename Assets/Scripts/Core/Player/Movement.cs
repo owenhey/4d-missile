@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Scripts.Core.Level;
 using Scripts.Utils;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Scripts.Core.Player {
         [SerializeField] private LayerMask _gamePlaneMask;
         [SerializeField] private FloatReference _validRadius;
         [SerializeField] private Transform _mousePos;
+        [SerializeField] private LevelManager _levelManager;
         
         [Header("Stat Calcs")]
         [SerializeField] private PlayerSpeedCalculation _speedCalculator;
@@ -25,20 +27,29 @@ namespace Scripts.Core.Player {
         private Vector3 _playerVel;
 
         public static System.Action<float> OnTakeDamage;
+        public static System.Action OnPlayerDeath;
         
 
         private void Awake() {
             _playerTrans = transform;
             _camera = Camera.main;
             GameManager.OnGameStateChange += OnGameStateChange;
+            _levelManager.OnWin += HideMouseIndicator;
         }
 
         private void OnDestroy() {
             GameManager.OnGameStateChange -= OnGameStateChange;
+            _levelManager.OnWin -= HideMouseIndicator;
+        }
+
+        private void HideMouseIndicator() {
+            _mousePos.gameObject.SetActive(false);
         }
 
         private void OnGameStateChange(GameState state) {
             if (state == GameState.Game) {
+                gameObject.SetActive(true);
+                _mousePos.gameObject.SetActive(true);
                 _playerHealth.SetValue(_maxHealthCalculator.GetMaxHealth());
             }
         }
@@ -62,10 +73,15 @@ namespace Scripts.Core.Player {
         }
 
         private void Die() {
-            
+            OnPlayerDeath?.Invoke();
+            CanMoveWithMouse = false;
+            _mousePos.gameObject.SetActive(false);
         }
 
         private void Update() {
+            if (Input.GetKeyDown(KeyCode.D)) {
+                TakeDamage(50);
+            }
             if (!CanMoveWithMouse) return;
             
             RaycastHit hit;

@@ -27,6 +27,11 @@ namespace Scripts.Core.Enemies {
         private void Start() {
             _startingPos = transform.position;
         }
+
+        public void ForceKill() {
+            _currentHealth = 0;
+            Die();
+        }
         
         public virtual void Damage(float damage) {
             _currentHealth -= damage;

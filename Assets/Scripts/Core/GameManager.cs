@@ -8,15 +8,18 @@ using UnityEngine;
 namespace Scripts.Core {
     public enum GameState {
         PreGame,
-        Game
+        Game,
+        Lose
     }
     public class GameManager : MonoBehaviour {
         [SerializeField] private ShopManager _shopManager;
         [SerializeField] private LevelManager _levelManager;
         
         public static Action<GameState> OnGameStateChange;
-
+        public static Action OnGameReset;
+        
         private static GameManager _instance;
+        
 
         private void OnPreGame() {
             _shopManager.RefreshShop();
@@ -45,6 +48,11 @@ namespace Scripts.Core {
         public static void ChangeGameState(GameState newState) {
             OnGameStateChange?.Invoke(newState);
             _instance.GameStateChangeHandler(newState);
+        }
+
+        public static void ResetGame() {
+            ChangeGameState(GameState.PreGame);
+            OnGameReset?.Invoke();
         }
     }
 }
