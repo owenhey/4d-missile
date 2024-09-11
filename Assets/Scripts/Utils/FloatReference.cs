@@ -34,6 +34,6 @@ namespace Scripts.Utils {
             SetValue(Value + delta);
         }
 
-        public static System.Action<float> OnValueChanged;
+        public System.Action<float> OnValueChanged;
     }
 }

@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e527fb5706c4b7a8b6913a256381884, type: 3}
-  m_Name: BombRadiusCalculation
+  m_Script: {fileID: 11500000, guid: 48c9a32053fb4c8b9d39828c2be6091c, type: 3}
+  m_Name: Current Grenade Count
   m_EditorClassIdentifier: 
-  _baseBombRadius: 1
-  _bombRadiusLevel: {fileID: 11400000, guid: 7f8a62eed6c82be43b5603196f17ddfc, type: 2}
+  _value: 1
+  _useStartValue: 1
+  _startValue: 1

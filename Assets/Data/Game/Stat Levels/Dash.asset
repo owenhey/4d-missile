@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48c9a32053fb4c8b9d39828c2be6091c, type: 3}
-  m_Name: Player Speed Level
+  m_Name: Dash
   m_EditorClassIdentifier: 
-  _value: 2
+  _value: 0
   _useStartValue: 1
-  _startValue: 1
+  _startValue: 0

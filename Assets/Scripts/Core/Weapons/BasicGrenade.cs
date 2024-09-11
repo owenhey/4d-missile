@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using Scripts.Core.Enemies;
+using Scripts.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,9 +10,7 @@ namespace Scripts.Core.Weapons {
         [SerializeField] private GameObject _explosion;
         [SerializeField] private GameObject _model;
         [SerializeField] private float _timeToGetThere;
-        [SerializeField] private BombRadiusCalculation _damageRadius;
-        [SerializeField] private BombDamageCalculation _damage;
-
+        
         private Vector3 _startPos;
         private Vector3 _endPos;
         private float _elapsedTime;
@@ -68,17 +67,17 @@ namespace Scripts.Core.Weapons {
         }
 
         private void DamageInArea() {
-            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, _damageRadius.GetBombRadius(), PlayerWeapons.HitColliders, Enemy.EnemyMask);
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 1.0f, PlayerWeapons.HitColliders, Enemy.EnemyMask);
             for (int i = 0; i < numColliders; i++) {
                 if(PlayerWeapons.HitColliders[i].TryGetComponent<Enemy>(out Enemy e)){
-                    e.Damage(_damage.GetBombDamage());
+                    e.Damage(100);
                 }
             }
         }
         
         #if UNITY_EDITOR
         private void OnDrawGizmosSelected() {
-            Gizmos.DrawSphere(transform.position, _damageRadius.GetBombRadius());
+            Gizmos.DrawSphere(transform.position, 1.0f);
         }
 #endif
     }

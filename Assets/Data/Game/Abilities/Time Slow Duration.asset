@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873b9b438b2344a59b933233321f4f10, type: 3}
-  m_Name: BombDamageCalculation
+  m_Script: {fileID: 11500000, guid: abaab398190b4c248277363588f960f8, type: 3}
+  m_Name: Time Slow Duration
   m_EditorClassIdentifier: 
-  _baseBombDamage: 10
-  _bombDamageLevel: {fileID: 11400000, guid: 58efbc36ac8eebc43992f5cf97859611, type: 2}
+  _value: 0
+  _useStartValue: 0
+  _startValue: 0
