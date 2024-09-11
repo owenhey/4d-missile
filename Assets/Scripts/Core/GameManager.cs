@@ -30,6 +30,7 @@ namespace Scripts.Core {
         }
         
         private void Start() {
+            Application.targetFrameRate = 60;
             _instance = this;
             ChangeGameState(GameState.PreGame);
         }

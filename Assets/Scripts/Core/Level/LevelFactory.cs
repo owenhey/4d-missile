@@ -20,7 +20,7 @@ namespace Scripts.Core.Level {
             var modifiers = GenerateModifiers(level);
             Debug.Log("mods: " + modifiers);
             var speed = GetSpeeds(level, modifiers);
-            float averageSpeed = (speed.startSpeed + speed.endSpeed) * 1.5f; 
+            float averageSpeed = (speed.startSpeed + speed.endSpeed) * .5f; 
             var obstacles = GetObstacles(level, averageSpeed, modifiers);
             float totalDistance = obstacles[^1].GetDistance();
             var credits = GetCredits(obstacles);
