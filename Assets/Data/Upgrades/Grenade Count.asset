@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Grenade Count
   m_EditorClassIdentifier: 
   UpgradeName: Grenade Count
-  _levelToUpgrade: {fileID: 11400000, guid: e311859599e19aa4cae3a15b13de4a3f, type: 2}
+  _levelToUpgrade: {fileID: 11400000, guid: 04862eb6c3ecf2c44b4af83880ec2393, type: 2}
+  BaseLevel: 0
   Icon: {fileID: 21300000, guid: 2c998047293015e4699778daa0907a37, type: 3}
   Text: Increases the number of grenades stored at once
   Cost: 30

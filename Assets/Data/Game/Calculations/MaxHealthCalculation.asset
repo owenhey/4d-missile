@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe296c216093449db4e96518fc78bba9, type: 3}
   m_Name: MaxHealthCalculation
   m_EditorClassIdentifier: 
-  _baseMaxHealth: 10
+  _baseMaxHealth: 100
   _maxHealthLevel: {fileID: 11400000, guid: 6ae23f73f666a98418cc5b9ec51f8e0c, type: 2}
