@@ -5,7 +5,7 @@ namespace Scripts.Core.Level {
         
         public ObstacleSpawnable[] Obstacles;
         public FloatSpawnable[] Credits;
-        public FloatSpawnable[] Enemies;
+        public EnemySpawnable[] Enemies;
 
         public override string ToString() {
             return $"Level: Starting Speed: {StartingSpeed}\nEnding Speed: {EndingSpeed}\nObstacle Count:{Obstacles.Length}";

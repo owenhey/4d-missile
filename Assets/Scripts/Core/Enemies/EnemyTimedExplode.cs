@@ -1,0 +1,57 @@
+using System.Collections;
+using DG.Tweening;
+using Scripts.Core.Player;
+using Scripts.Core.Weapons;
+using UnityEngine;
+
+namespace Scripts.Core.Enemies {
+    public class EnemyTimedExplode : EnemyWeapon {
+        [SerializeField] private Transform _model;
+        [SerializeField] private float _timeToExplode = 5.0f;
+        [SerializeField] private ParticleSystem _particleSystem;
+        
+        [SerializeField] private MeshRenderer _meshRenderer;
+        private Material _material;
+        private static readonly int T = Shader.PropertyToID("_T");
+
+        private void Awake() {
+            CopyAndAssignMaterial();
+        }
+
+        protected override void FireWeapon() {
+            StartCoroutine(ExplodeTimer());
+        }
+
+        private IEnumerator ExplodeTimer() {
+            float startTime = Time.time;
+            float endTime = startTime + _timeToExplode;
+
+            while (Time.time < endTime) {
+                float t = (endTime - Time.time) / _timeToExplode;
+                _material.SetFloat(T, t);
+                yield return null;
+            }
+
+            Explode();
+        }
+
+        private void Explode() {
+            _model.DOShakePosition(.4f, 1.0f, 10);
+            
+            // Deal the damage
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 20.0f, PlayerWeapons.HitColliders, Enemy.PlayerMask);
+            for (int i = 0; i < numColliders; i++) {
+                if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)){
+                    m.TakeDamage(30);
+                }
+            }
+            
+            _particleSystem.Play();
+        }
+
+        private void CopyAndAssignMaterial() {
+            _material = new Material(_meshRenderer.material);
+            _meshRenderer.material = _material;
+        }
+    }
+}

@@ -156,8 +156,9 @@ MonoBehaviour:
   _explosion: {fileID: 8855126939453577944}
   _model: {fileID: 4358398253473509431}
   _timeToGetThere: 0.75
-  _damageRadius: {fileID: 11400000, guid: 23f53ed24d8b65f48a7920ff9116f25e, type: 2}
-  _damage: {fileID: 11400000, guid: 013fecfec58dafd46a16f8cd2cbb2c44, type: 2}
+  _grenadeRadiusLevel: {fileID: 11400000, guid: 9556a65040e71664c9fadd8aa4804161,
+    type: 2}
+  _explosionPS: {fileID: 287043539420552105}
 --- !u!1001 &7976168118212678731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -226,11 +227,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90dfb2aed4de5c041916a9f1c24b92a5, type: 3}
+--- !u!198 &287043539420552105 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7976168118212678731}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5584085636184741091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2580460229879382184, guid: 90dfb2aed4de5c041916a9f1c24b92a5,

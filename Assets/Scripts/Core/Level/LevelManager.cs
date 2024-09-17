@@ -21,7 +21,7 @@ namespace Scripts.Core.Level{
 
         private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
         private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
-        private SpawnAfterDistance<FloatSpawnable> _enemiesSpawnBehav;
+        private SpawnAfterDistance<EnemySpawnable> _enemiesSpawnBehav;
 
         private float _distanceTraveled;
         private float _totalDistance;
@@ -77,8 +77,8 @@ namespace Scripts.Core.Level{
             _creditSpawner.Spawn();
         }
 
-        private void SpawnEnemy(FloatSpawnable spawnable) {
-            _enemySpawner.Spawn();
+        private void SpawnEnemy(EnemySpawnable spawnable) {
+            _enemySpawner.Spawn(spawnable.NumberToSpawn);
         }
 
         private void UpdateSpeed() {

@@ -8,7 +8,7 @@ namespace Scripts.Core.Player {
         [SerializeField] private IntReference _maxHealthLevel;
         
         public float GetMaxHealth() {
-            return _baseMaxHealth * (_maxHealthLevel.Value);
+            return _baseMaxHealth * ((_maxHealthLevel.Value + 1) * .5f);
         }
     }
 }

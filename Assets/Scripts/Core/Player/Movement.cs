@@ -113,7 +113,6 @@ namespace Scripts.Core.Player {
             }
             bool canDash = _dashCharges.Value > 0;
             if (canDash && Input.GetKeyDown(KeyCode.LeftShift)) {
-                
                 Dash();
             }
             if (!CanMoveWithMouse) return;

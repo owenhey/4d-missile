@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _value: 1
   _useStartValue: 1
-  _startValue: 0
+  _startValue: 1

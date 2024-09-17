@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Scripts.Core.Level;
@@ -16,25 +17,34 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private LevelManager _levelManager;
 
         private List<Enemy> _spawnedEnemies = new();
+        private int lastEnemySpawnIndex = -1;
 
-        public void Spawn() {
-            Invoke(nameof(S), Random.Range(0, 1.0f));
-        }
+        public void Spawn(int num) {
+            IEnumerator DelayedSpawn() {
+                yield return new WaitForSeconds(Random.Range(0.0f, 1.0f));
 
-        private void S() {
-            var playerPosition = _playerTrans.position;
-            var newEnemy = Instantiate(_possibleEnemies.GetRandom(), transform);
-            _spawnedEnemies.Add(newEnemy);
+                // Choose an enemy that is different than the last one spawned
+                lastEnemySpawnIndex = (Random.Range(0, _possibleEnemies.Count - 1) + lastEnemySpawnIndex + 1) %
+                                      _possibleEnemies.Count;
+                Enemy enemyToSpawn = _possibleEnemies[lastEnemySpawnIndex];
+                
+                var playerPosition = _playerTrans.position;
+                var newEnemy = Instantiate(enemyToSpawn, transform);
+                _spawnedEnemies.Add(newEnemy);
             
-            Vector3 spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
-            while (true) {
-                float distanceToPlayer = Vector3.Distance(playerPosition, spawnPosition);
-                if (distanceToPlayer > 4) break;
-                spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
+                Vector3 spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
+                while (true) {
+                    float distanceToPlayer = Vector3.Distance(playerPosition, spawnPosition);
+                    if (distanceToPlayer > 4) break;
+                    spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;
+                }
+
+                newEnemy.transform.position = spawnPosition;
+                newEnemy.transform.DOScale(Vector3.one, .25f).From(Vector3.zero);
             }
 
-            newEnemy.transform.position = spawnPosition;
-            newEnemy.transform.DOScale(Vector3.one, .25f).From(Vector3.zero);
+            for (int i = 0; i < num; i++)
+                StartCoroutine(DelayedSpawn());
         }
 
         private void DestroyAllEnemies() {

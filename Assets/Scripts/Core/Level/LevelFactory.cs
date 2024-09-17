@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using Scripts.Misc;
+using Scripts.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -126,12 +127,15 @@ namespace Scripts.Core.Level {
             return credits.ToArray();
         }
 
-        private static FloatSpawnable[] GetEnemies(int level, float totalDistance, LevelModifiers modifiers) {
+        private static EnemySpawnable[] GetEnemies(int level, float totalDistance, LevelModifiers modifiers) {
             if (level == 1) {
-                return Array.Empty<FloatSpawnable>();
+                return Array.Empty<EnemySpawnable>();
             }
 
-            int numEnemies = level;
+            float remappedLevel = Helpers.RemapNoClamp(level, 2, 12, 1, 3);
+                
+                
+            int numEnemies = (int)(5 * remappedLevel);
             if (modifiers.HasFlag(LevelModifiers.MoreEnemies)) {
                 numEnemies = (int)(numEnemies * 1.5f);
             }
@@ -141,8 +145,40 @@ namespace Scripts.Core.Level {
 
             float totalValidSpawnSpace = totalDistance - (startCap + endCap);
             float spaceBetweenEnemies =  totalValidSpawnSpace / (numEnemies + 1);
+            
+            var floatArray = CreateEvenlySpacedArray(100, spaceBetweenEnemies, numEnemies).ToList();
+            // Just put 1 as everything to start
+            List<EnemySpawnable> enemyList = floatArray.Select(x => new EnemySpawnable(x.GetDistance(), 1)).ToList();
+            
+            // Calculate a few places to spawn in more enemies (2 or 3 enemies at once)
+            int numDoubleEnemies = 0;
+            if (level > 3) {
+                numDoubleEnemies = 2;
+            }
+            if (level > 7) {
+                numDoubleEnemies = 4;
+            }
 
-            return CreateEvenlySpacedArray(100, spaceBetweenEnemies, numEnemies);
+            int numTripleEnemies = 0;
+            if (level > 8) {
+                numTripleEnemies = (level - 7) / 2;
+            }
+
+            // Insert the double enemies
+            int randomStartIndex = Random.Range(0, enemyList.Count);
+            for (int i = 0; i < numDoubleEnemies; i++) {
+                int insertionIndex = (randomStartIndex + (i * 2)) % enemyList.Count;
+                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2);
+            }
+            
+            // Insert the triple enemies
+            randomStartIndex = Random.Range(0, enemyList.Count);
+            for (int i = 0; i < numTripleEnemies; i++) {
+                int insertionIndex = (randomStartIndex + (i * 2)) % enemyList.Count;
+                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2);
+            }
+            
+            return enemyList.ToArray();
         }
 
         private static FloatSpawnable[] CreateEvenlySpacedArray(float startAt, float distance, int number) {
@@ -168,6 +204,14 @@ namespace Scripts.Core.Level {
         
         public float GetDistance() {
             return Value;
+        }
+    }
+
+    public class EnemySpawnable : FloatSpawnable {
+        public int NumberToSpawn;
+
+        public EnemySpawnable(float dis, int num) : base(dis) {
+            NumberToSpawn = num;
         }
     }
 

@@ -10,6 +10,8 @@ namespace Scripts.Core.Weapons {
         [SerializeField] private GameObject _explosion;
         [SerializeField] private GameObject _model;
         [SerializeField] private float _timeToGetThere;
+        [SerializeField] private IntReference _grenadeRadiusLevel;
+        [SerializeField] private ParticleSystem _explosionPS;
         
         private Vector3 _startPos;
         private Vector3 _endPos;
@@ -36,6 +38,12 @@ namespace Scripts.Core.Weapons {
                 (displacement.y / _timeToGetThere) + (0.5f * gravity * _timeToGetThere),
                 displacement.z / _timeToGetThere
             );
+
+            var mainPS = _explosionPS.main;
+            mainPS.startSpeedMultiplier = GetGrenadeRadius();
+
+            var dampenPS = _explosionPS.limitVelocityOverLifetime;
+            dampenPS.limit = 2 * GetGrenadeRadius();
         }
 
         private void Update() {
@@ -67,17 +75,22 @@ namespace Scripts.Core.Weapons {
         }
 
         private void DamageInArea() {
-            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 1.0f, PlayerWeapons.HitColliders, Enemy.EnemyMask);
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, GetGrenadeRadius(), PlayerWeapons.HitColliders, Enemy.EnemyMask);
             for (int i = 0; i < numColliders; i++) {
                 if(PlayerWeapons.HitColliders[i].TryGetComponent<Enemy>(out Enemy e)){
                     e.Damage(100);
                 }
             }
         }
+
+        private float GetGrenadeRadius() {
+            return 1.0f + (_grenadeRadiusLevel.Value - 1);
+        }
         
-        #if UNITY_EDITOR
-        private void OnDrawGizmosSelected() {
-            Gizmos.DrawSphere(transform.position, 1.0f);
+#if UNITY_EDITOR
+        private void OnDrawGizmos() {
+            Gizmos.color = new Color(1, 1, 1, .25f);
+            Gizmos.DrawSphere(transform.position, GetGrenadeRadius());
         }
 #endif
     }

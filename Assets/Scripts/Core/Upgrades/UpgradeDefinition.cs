@@ -10,6 +10,7 @@ namespace Scripts.Core.Upgrades {
         public new string name => UpgradeName;
         [SerializeField] private IntReference _levelToUpgrade;
         public IntReference LevelToUpgrade => _levelToUpgrade;
+        public int BaseLevel;
 
         public Sprite Icon;
         [TextArea(4,4)] public string Text;
