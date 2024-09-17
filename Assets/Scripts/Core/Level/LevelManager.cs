@@ -17,8 +17,6 @@ namespace Scripts.Core.Level{
         [SerializeField] private IntReference _currentLevel;
         [SerializeField] private FloatReference _endAnimationTime;
         
-        private LevelData _levelData;
-
         private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
         private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
         private SpawnAfterDistance<EnemySpawnable> _enemiesSpawnBehav;
@@ -29,15 +27,27 @@ namespace Scripts.Core.Level{
 
         public Action OnWin;
 
-        public float PercentThroughLevel { get; private set; }
+        public LevelData CurrentLevelData => GetCurrentLevelData();
+        private LevelData _currentLevelData;
 
+        private LevelData GetCurrentLevelData() {
+            if (_currentLevelData != null) return _currentLevelData;
+
+            _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
+            return _currentLevelData;
+        }
+
+        public float PercentThroughLevel { get; private set; }
+        
         public void PlayCurrentLevel() {
-            var levelData = LevelFactory.GenerateLevel(_currentLevel.Value);
-            PlayLevel(levelData);
+            if (_currentLevelData == null) {
+                _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
+            }
+            PlayLevel(_currentLevelData);
         }
         
         private void PlayLevel(LevelData levelData) {
-            _levelData = levelData;
+            _currentLevelData = levelData;
             _totalDistance = levelData.Obstacles[^1].Value + _obstacleSpawner.GetObstacleSpawnDistance();
             _distanceTraveled = 0;
             _playerSpeed.SetValue(levelData.StartingSpeed);
@@ -82,7 +92,7 @@ namespace Scripts.Core.Level{
         }
 
         private void UpdateSpeed() {
-            float newSpeed = Mathf.Lerp(_levelData.StartingSpeed, _levelData.EndingSpeed, PercentThroughLevel);
+            float newSpeed = Mathf.Lerp(_currentLevelData.StartingSpeed, _currentLevelData.EndingSpeed, PercentThroughLevel);
             _playerSpeed.SetValue(newSpeed);
         }
 
@@ -108,6 +118,11 @@ namespace Scripts.Core.Level{
         private void HandleGameStateChange(GameState state) {
             bool isLevel = state == GameState.Game;
             gameObject.SetActive(isLevel);
+
+            bool isPregame = state == GameState.PreGame;
+            if (isPregame) {
+                _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
+            }
         }
         
         private void HandlePlayerDeath() {

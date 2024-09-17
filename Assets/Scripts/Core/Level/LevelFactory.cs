@@ -16,6 +16,17 @@ namespace Scripts.Core.Level {
             Longer = 4,
             Faster = 8,
         }
+
+        private static string GetString(LevelModifiers l) {
+            switch (l) {
+                case LevelModifiers.MoreEnemies: return "More Enemies";
+                case LevelModifiers.HarderEnemies: return "Stronger Enemies";
+                case LevelModifiers.Longer: return "Longer";
+                case LevelModifiers.Faster: return "Faster";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(l), l, null);
+            }
+        }
         
         public static LevelData GenerateLevel(int level) {
             var modifiers = GenerateModifiers(level);
@@ -33,6 +44,7 @@ namespace Scripts.Core.Level {
                 Obstacles = obstacles,
                 Credits = credits,
                 Enemies = enemies,
+                Modifiers = TurnModifiersIntoStrings(modifiers)
             };
             Debug.Log(levelData);
             return levelData;
@@ -136,7 +148,8 @@ namespace Scripts.Core.Level {
                 
                 
             int numEnemies = (int)(5 * remappedLevel);
-            if (modifiers.HasFlag(LevelModifiers.MoreEnemies)) {
+            bool hasMoreEnemies = modifiers.HasFlag(LevelModifiers.MoreEnemies);
+            if (hasMoreEnemies) {
                 numEnemies = (int)(numEnemies * 1.5f);
             }
 
@@ -153,15 +166,15 @@ namespace Scripts.Core.Level {
             // Calculate a few places to spawn in more enemies (2 or 3 enemies at once)
             int numDoubleEnemies = 0;
             if (level > 3) {
-                numDoubleEnemies = 2;
+                numDoubleEnemies = hasMoreEnemies ? 3 : 2;
             }
             if (level > 7) {
-                numDoubleEnemies = 4;
+                numDoubleEnemies = hasMoreEnemies ? 5 : 4;
             }
 
             int numTripleEnemies = 0;
             if (level > 8) {
-                numTripleEnemies = (level - 7) / 2;
+                numTripleEnemies = hasMoreEnemies ? level - 7 : (level - 7) / 2;
             }
 
             // Insert the double enemies
@@ -191,6 +204,18 @@ namespace Scripts.Core.Level {
         }
 
         private static float Ran01 => Random.Range(0.0f, 1.0f);
+
+        private static List<string> TurnModifiersIntoStrings(LevelModifiers mods) {
+            var retList = new List<string>();
+            
+            var allMods = Enum.GetValues(typeof(LevelModifiers)).Cast<LevelModifiers>().ToArray();
+            foreach (var mod in allMods) {
+                if(mods.HasFlag(mod))
+                    retList.Add(GetString(mod));
+            }
+
+            return retList;
+        }
     }
 
     public class FloatSpawnable : IDataSpawnable {

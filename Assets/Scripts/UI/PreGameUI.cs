@@ -14,14 +14,18 @@ namespace Scripts.UI {
         [SerializeField] private Button _nextButton;
         [SerializeField] private ShopManager _shopManager;
         [SerializeField] private IntReference _currentLevel;
+        [SerializeField] private LevelManager _levelManager;
         
         [Header("Text Section")] 
         [SerializeField] private TextMeshProUGUI _levelText;
+        [SerializeField] private TextMeshProUGUI _modifierListField;
 
         [Header("Upgrade Section")] 
         [SerializeField] private List<UpgradeOptionUI> _upgradeOptionUIs;
         [SerializeField] private ToggleGroup _optionsToggleGroup;
         [SerializeField] private IntReference _playerCredits;
+
+        private LevelData _generatedLevel;
         
         private void HandleShopRefresh(UpgradeDefinition[] upgrades) {
             _upgradeOptionUIs.EnsureEnoughElementsAndSetActive(upgrades.Length);
@@ -31,6 +35,34 @@ namespace Scripts.UI {
             }
             
             _optionsToggleGroup.SetAllTogglesOff();
+        }
+
+        private void OnEnable() {
+            UpdateModifierText();
+        }
+
+        private void UpdateModifierText() {
+            LevelData currentLevelData = _levelManager.CurrentLevelData;
+            if (currentLevelData.Modifiers.Count == 0) {
+                _modifierListField.text = "None";
+                return;
+            }
+
+            if (currentLevelData.Modifiers.Count == 4) {
+                _modifierListField.text = "Hell";
+                return;
+            }
+
+            string text = "";
+            for (var index = 0; index < currentLevelData.Modifiers.Count; index++) {
+                var mod = currentLevelData.Modifiers[index];
+                text += mod;
+                if (index < currentLevelData.Modifiers.Count - 1) {
+                    text += "<br>";
+                }
+            }
+
+            _modifierListField.text = text;
         }
 
         private void Awake() {
