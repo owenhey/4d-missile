@@ -76,7 +76,7 @@ namespace Scripts.Core.Level {
         }
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
-            int startSpeed = (int)((level - 1) * 4.5f) + 10; // Goes from 10 to 65
+            int startSpeed = (int)((level - 1) * 4.5f) + 20; // Goes from 20 to 65
             int endSpeed = (int)(startSpeed * 1.4f); 
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);

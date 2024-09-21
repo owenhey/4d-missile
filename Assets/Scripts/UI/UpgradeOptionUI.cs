@@ -57,8 +57,8 @@ namespace Scripts.UI{
         }
 
         private void UpdateCurrentLevelUI() {
-            int currentLevel = _upgradeShowing.LevelToUpgrade.Value;
             int baseLevel = _upgradeShowing.BaseLevel;
+            int currentLevel = _upgradeShowing.LevelToUpgrade.Value;
             int maxLevel = _upgradeShowing.MaxLevel;
             float t = Helpers.RemapClamp(currentLevel, baseLevel, maxLevel, 0, 1);
             Color color = Color.Lerp(_lowLevelColor, _highLevelColor, t);
