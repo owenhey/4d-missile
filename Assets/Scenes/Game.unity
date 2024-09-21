@@ -19029,7 +19029,7 @@ MonoBehaviour:
   _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
   _endAnimationTime: {fileID: 11400000, guid: d61b2bfe57a273743b3a00632fe69e54, type: 2}
   _playerLives: {fileID: 11400000, guid: ed1d246b10f0c46459ebe978a6f5c1d3, type: 2}
-  _credits: {fileID: 0}
+  _credits: {fileID: 11400000, guid: 4baea02403c8bff4fb770d6891c7aa22, type: 2}
 --- !u!114 &1838888814
 MonoBehaviour:
   m_ObjectHideFlags: 0

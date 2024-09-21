@@ -170,10 +170,13 @@ namespace Scripts.Core.Level {
             
             // Calculate a few places to spawn in more enemies (2 or 3 enemies at once)
             int numDoubleEnemies = 0;
-            if (level > 3) {
+            if (level > 2) {
                 numDoubleEnemies = hasMoreEnemies ? 3 : 2;
             }
-            if (level > 7) {
+            if (level > 4) {
+                numDoubleEnemies = hasMoreEnemies ? 4 : 3;
+            }
+            if (level > 6) {
                 numDoubleEnemies = hasMoreEnemies ? 5 : 4;
             }
 
