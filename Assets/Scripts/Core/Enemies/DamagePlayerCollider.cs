@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
 using Scripts.Core.Player;
+using Scripts.Utils;
 
 namespace Scripts.Core.Enemies {
     public class DamagePlayerCollider : MonoBehaviour {
-        public float DamageAmount = 25;
         [SerializeField] private bool _canDamageMoreThanOnce = false;
         [SerializeField] private Collider _collider;
+        [SerializeField] private IntReference _currentLevel;
 
         public bool HasDamaged = false;
         public bool Enabled {
@@ -18,7 +19,8 @@ namespace Scripts.Core.Enemies {
         private void OnTriggerEnter(Collider other) {
             if (!_canDamageMoreThanOnce && HasDamaged) return;
             if (other.CompareTag("Player")) {
-                other.GetComponent<Movement>().TakeDamage(DamageAmount);
+                int damage = 30 + (_currentLevel.Value - 1) * 5;
+                other.GetComponent<Movement>().TakeDamage(damage);
                 HasDamaged = true;
             }
         }

@@ -16,6 +16,7 @@ namespace Scripts.Core.Obstacles {
         [SerializeField] private bool _hitPlayer = false;
 
         [SerializeField] private FloatReference _obstacleRotationSpeed;
+        [SerializeField] private IntReference _currentLevel;
 
         public static Action<bool> OnObstaclePass;
 
@@ -23,7 +24,7 @@ namespace Scripts.Core.Obstacles {
 
         private int _randomRotateDirection;
         private Movement _playerMovement;
-        
+
         private void Awake() {
             _trans = transform;
             _playerMovement = GameObject.FindFirstObjectByType<Movement>();
@@ -48,7 +49,8 @@ namespace Scripts.Core.Obstacles {
 
         public void CollideWithPlayer() {
             _hitPlayer = true;
-            _playerMovement.TakeDamage(20);
+            int damage = 30 + (_currentLevel.Value - 1) * 5;
+            _playerMovement.TakeDamage(damage);
         }
 
         public void OnPassedPlayer() {

@@ -158,6 +158,7 @@ MonoBehaviour:
   _meshRenderer: {fileID: 8962821550676817317}
   _baseColor: {r: 0.9150943, g: 0.35543624, b: 0, a: 1}
   _animateColor: {r: 1, g: 1, b: 1, a: 1}
+  _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
 --- !u!1 &8855126939453577944
 GameObject:
   m_ObjectHideFlags: 0

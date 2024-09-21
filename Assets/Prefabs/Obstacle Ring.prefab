@@ -820,6 +820,7 @@ MonoBehaviour:
   _hitPlayer: 0
   _obstacleRotationSpeed: {fileID: 11400000, guid: 5d3a0b307c435274d992e3b9feb720d9,
     type: 2}
+  _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
   IsFinishLine: 0
 --- !u!114 &7694362155573688260
 MonoBehaviour:

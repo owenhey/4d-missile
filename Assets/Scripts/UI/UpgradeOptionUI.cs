@@ -45,7 +45,7 @@ namespace Scripts.UI{
                 _levelCountField.text = $"({upgradeData.LevelsToUpgrade}) levels";
             }
 
-            bool canPurchase = playerCredits > upgradeData.Cost;
+            bool canPurchase = playerCredits >= upgradeData.Cost;
             _buyButton.GetComponentInChildren<TextMeshProUGUI>().text = canPurchase ? "Buy" : "Not enough credits";
             _cg.interactable = canPurchase;
 

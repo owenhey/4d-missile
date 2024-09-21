@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Scripts.Core.Player;
 using Scripts.Core.Weapons;
+using Scripts.Utils;
 using UnityEngine;
 
 namespace Scripts.Core.Enemies {
@@ -9,6 +10,7 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private Transform _model;
         [SerializeField] private float _timeToExplode = 5.0f;
         [SerializeField] private ParticleSystem _particleSystem;
+        [SerializeField] private IntReference _currentLevel;
         
         [SerializeField] private MeshRenderer _meshRenderer;
         private Material _material;
@@ -42,6 +44,7 @@ namespace Scripts.Core.Enemies {
             int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 20.0f, PlayerWeapons.HitColliders, Enemy.PlayerMask);
             for (int i = 0; i < numColliders; i++) {
                 if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)){
+                    int damage = 30 + (_currentLevel.Value - 1) * 5;
                     m.TakeDamage(30);
                 }
             }

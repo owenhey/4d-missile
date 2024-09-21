@@ -5452,6 +5452,7 @@ MonoBehaviour:
   _model: {fileID: 7330054840861551835}
   _timeToExplode: 5
   _particleSystem: {fileID: 4601685004191948385}
+  _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
   _meshRenderer: {fileID: 9125735031465543100}
 --- !u!1001 &1876395721117003008
 PrefabInstance:

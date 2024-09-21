@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using Scripts.Core.Player;
 using Scripts.Core.Weapons;
+using Scripts.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +14,8 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private Color _baseColor;
         [SerializeField] private Color _animateColor;
+
+        [SerializeField] private IntReference _currentLevel;
         
         private Material _material;
         private float _animateMatTimerStart;
@@ -63,8 +66,9 @@ namespace Scripts.Core.Enemies {
         private void DamageInArea() {
             int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, PlayerWeapons.HitColliders, Enemy.PlayerMask);
             for (int i = 0; i < numColliders; i++) {
-                if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)){
-                    m.TakeDamage(30);
+                if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)) {
+                    int damage = 30 + (_currentLevel.Value - 1) * 5;
+                    m.TakeDamage(damage);
                 }
             }
         }

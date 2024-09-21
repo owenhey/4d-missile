@@ -120,9 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6f42176d854315aa99964a0aeb62fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageAmount: 25
   _canDamageMoreThanOnce: 0
   _collider: {fileID: 1673690584275170934}
+  _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
   HasDamaged: 0
 --- !u!1 &1797752543649869873
 GameObject:
