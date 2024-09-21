@@ -95,7 +95,7 @@ namespace Scripts.Core.Player {
         public void TakeDamage(float amount) {
             _playerHealth.Add(-amount);
             OnTakeDamage?.Invoke(amount);
-            if (_playerHealth.Value < 0) {
+            if (_playerHealth.Value <= 0) {
                 Die();
             }
         }
