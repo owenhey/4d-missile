@@ -67,7 +67,7 @@ namespace Scripts.Core.Enemies {
             int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 1.5f, PlayerWeapons.HitColliders, Enemy.PlayerMask);
             for (int i = 0; i < numColliders; i++) {
                 if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)) {
-                    int damage = 30 + (_currentLevel.Value - 1) * 5;
+                    int damage = 30 + (_currentLevel.Value - 1) * 4;
                     m.TakeDamage(damage);
                 }
             }

@@ -43,8 +43,8 @@ namespace Scripts.Core.Enemies {
             // Deal the damage
             int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 20.0f, PlayerWeapons.HitColliders, Enemy.PlayerMask);
             for (int i = 0; i < numColliders; i++) {
-                if(PlayerWeapons.HitColliders[i].TryGetComponent<Movement>(out Movement m)){
-                    int damage = 30 + (_currentLevel.Value - 1) * 5;
+                if(PlayerWeapons.HitColliders[i].TryGetComponent(out Movement m)){
+                    int damage = 30 + (_currentLevel.Value - 1) * 4;
                     m.TakeDamage(30);
                 }
             }

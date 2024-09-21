@@ -49,7 +49,7 @@ namespace Scripts.Core.Obstacles {
 
         public void CollideWithPlayer() {
             _hitPlayer = true;
-            int damage = 30 + (_currentLevel.Value - 1) * 5;
+            int damage = 30 + (_currentLevel.Value - 1) * 4;
             _playerMovement.TakeDamage(damage);
         }
 
