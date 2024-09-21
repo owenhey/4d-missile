@@ -17,6 +17,7 @@ namespace Scripts.Core.Level{
         [SerializeField] private IntReference _currentLevel;
         [SerializeField] private FloatReference _endAnimationTime;
         [SerializeField] private IntReference _playerLives;
+        [SerializeField] private IntReference _credits;
         
         private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
         private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
@@ -25,8 +26,10 @@ namespace Scripts.Core.Level{
         private float _distanceTraveled;
         private float _totalDistance;
         private bool _died; // Keeps track of whether the player has died
-
+        private float _damageTakenThisRun;
+        
         public Action OnWin;
+        public Action OnFlawlessWin;
 
         public LevelData CurrentLevelData => GetCurrentLevelData();
         private LevelData _currentLevelData;
@@ -53,6 +56,7 @@ namespace Scripts.Core.Level{
             _distanceTraveled = 0;
             _playerSpeed.SetValue(levelData.StartingSpeed);
             _died = false;
+            _damageTakenThisRun = 0;
             
             _obstacleSpawner.DestroyAllObstacles();
             _creditSpawner.DestroyAllCredits();
@@ -110,6 +114,10 @@ namespace Scripts.Core.Level{
             OnWin?.Invoke();
             _obstacleSpawner.DestroyAllObstacles();
             _currentLevel.Add(1);
+            if (_damageTakenThisRun == 0) {
+                OnFlawlessWin?.Invoke();
+                _credits.Add(25);
+            }
             
             Invoke(nameof(AdvanceFromLevel), _endAnimationTime.Value);
         }
@@ -135,16 +143,22 @@ namespace Scripts.Core.Level{
             DOTween.To(()=>_playerSpeed.Value, x => _playerSpeed.SetValue(x), 0, 1.0f);
         }
         
+        private void HandleTakeDamage(float damage) {
+            _damageTakenThisRun += damage;
+        }
+        
         private void Awake() {
             ObstacleBehavior.OnObstaclePass += ObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
             Movement.OnPlayerDeath += HandlePlayerDeath;
+            Movement.OnTakeDamage += HandleTakeDamage;
         }
 
         private void OnDestroy() {
             ObstacleBehavior.OnObstaclePass -= ObstaclePassHandler;
             GameManager.OnGameStateChange -= HandleGameStateChange;
             Movement.OnPlayerDeath -= HandlePlayerDeath;
+            Movement.OnTakeDamage -= HandleTakeDamage;
         }
     }
 }

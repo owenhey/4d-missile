@@ -92,6 +92,11 @@ namespace Scripts.Core.Level {
             int spaceBetween = 40 + level;
             int totalObstacles = (int)(totalDistance / spaceBetween);
             FloatSpawnable[] array = CreateEvenlySpacedArray(level * 10, spaceBetween, totalObstacles);
+            // Go thru and adjust some of the obstacles to be nearer or farther from eachother
+            for (int i = 1; i < array.Length - 2; i++) {
+                float adjustment = Random.Range(-.2f, .2f) * spaceBetween;
+                array[i].Value += adjustment;
+            }
 
             List<ObstacleSpawnable> _obsSpawnables = new List<ObstacleSpawnable>(array.Length);
             for (int i = 0; i < array.Length; i++) {
@@ -221,7 +226,7 @@ namespace Scripts.Core.Level {
     public class FloatSpawnable : IDataSpawnable {
         public static implicit operator FloatSpawnable(float f) => new FloatSpawnable(f);
         
-        public float Value { get; private set; }
+        public float Value { get; internal set; }
 
         public FloatSpawnable(float f) {
             Value = f;
