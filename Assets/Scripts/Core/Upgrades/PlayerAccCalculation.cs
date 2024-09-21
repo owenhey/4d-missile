@@ -10,7 +10,7 @@ namespace Scripts.Core.Player {
         // https://www.desmos.com/calculator/bivohm991j
         public float GetAcceleration() {
             float x = (float)_playerAccLevel.Value;
-            float exp = (x - 1) * .75f;
+            float exp = (x - 1) * .5f;
             float bottom = 1 + (Mathf.Exp(exp));
             float final = 2 * (1 / bottom);
             

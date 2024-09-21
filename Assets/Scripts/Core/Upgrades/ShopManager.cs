@@ -5,21 +5,38 @@ using Scripts.Utils;
 using UnityEngine;
 
 namespace Scripts.Core.Upgrades {
+    public struct ShopUpgradeData {
+        public UpgradeDefinition UpgradeDef;
+        public int LevelsToUpgrade;
+        public int Cost;
+
+        public ShopUpgradeData(UpgradeDefinition upgradeDef, int levelsToUpgrade, int cost) {
+            UpgradeDef = upgradeDef;
+            LevelsToUpgrade = levelsToUpgrade;
+            Cost = cost;
+        }
+    }
+    
     public class ShopManager : MonoBehaviour {
         [SerializeField] private UpgradeDefinition[] _regularUpgrades;
         [SerializeField] private UpgradeDefinition[] _powerfulUpgrades;
         [SerializeField] private IntReference _playerCredits;
         
-        public System.Action<UpgradeDefinition[]> OnShopRefresh;
+        public System.Action<ShopUpgradeData[]> OnShopRefresh;
         
         public void RefreshShop() {
             List<UpgradeDefinition> possibleUpgrades = new List<UpgradeDefinition>(_regularUpgrades);
-            List<UpgradeDefinition> chosenUpgrades = new List<UpgradeDefinition>(_regularUpgrades.Length);
+            List<ShopUpgradeData> chosenUpgrades = new List<ShopUpgradeData>(_regularUpgrades.Length);
 
             // First, show 2 upgrades that are regular ones
             while (chosenUpgrades.Count < 2 && possibleUpgrades.Count > 0) {
                 int randomIndex = Random.Range(0, possibleUpgrades.Count);
-                chosenUpgrades.Add(possibleUpgrades[randomIndex]);
+                
+                // This is just one upgrade for the base cost
+                var upgrade = possibleUpgrades[randomIndex];
+                ShopUpgradeData singleUpgrade = new(upgrade, 1, upgrade.Cost);
+                chosenUpgrades.Add(singleUpgrade);
+                
                 possibleUpgrades.RemoveAt(randomIndex);
             }
             
@@ -29,16 +46,24 @@ namespace Scripts.Core.Upgrades {
             if (choosePowerfulOne) {
                 UpgradeDefinition randomPowerful = GetRandomPowerfulUpgrade();
                 if (randomPowerful == null) {
-                    chosenUpgrades.Add(possibleUpgrades.GetRandom());
+                    var upgrade = possibleUpgrades.GetRandom();
+                    ShopUpgradeData singleUpgrade = new(upgrade, 1, upgrade.Cost);
+                    chosenUpgrades.Add(singleUpgrade);
                 }
                 else {
-                    chosenUpgrades.Add(randomPowerful);
+                    // This means successfully grabbed a random powerful one
+                    var singleUpgrade = new ShopUpgradeData(randomPowerful, 1, randomPowerful.Cost);
+                    chosenUpgrades.Add(singleUpgrade);
                 }
             }
             else {
-                // Upgrade one of the regular ones to a double powerful one
-                // TODO: double upgrade here
-                chosenUpgrades.Add(possibleUpgrades.GetRandom());
+                float percentageOff = .80f;
+                int numLevelsToGive = 2;
+                
+                // Upgrade one of the regular ones to a double cost less one
+                var chosenUpgrade = possibleUpgrades.GetRandom();
+                int newPrice = (int)(chosenUpgrade.Cost * numLevelsToGive * percentageOff);
+                chosenUpgrades.Add(new ShopUpgradeData(chosenUpgrade, numLevelsToGive, newPrice));
             }
 
             OnShopRefresh?.Invoke(chosenUpgrades.ToArray());
@@ -47,8 +72,14 @@ namespace Scripts.Core.Upgrades {
         private UpgradeDefinition GetRandomPowerfulUpgrade() {
             List<UpgradeDefinition> possibleUpgrades = new List<UpgradeDefinition>(_powerfulUpgrades.Length);
             foreach (var upgrade in _powerfulUpgrades) {
-                bool hasntChosenYet = upgrade.LevelToUpgrade.Value == upgrade.BaseLevel;
-                if (hasntChosenYet) {
+                bool canShow = upgrade.LevelToUpgrade.Value == upgrade.BaseLevel;
+                
+                // Just hard code in this one
+                if (upgrade.UpgradeName == "Grenade Count") {
+                    canShow = true;
+                }
+                
+                if (canShow) {
                     possibleUpgrades.Add(upgrade);
                 }
             }

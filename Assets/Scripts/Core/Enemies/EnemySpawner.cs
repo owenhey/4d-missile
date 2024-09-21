@@ -24,10 +24,11 @@ namespace Scripts.Core.Enemies {
                 yield return new WaitForSeconds(Random.Range(0.0f, 1.0f));
 
                 // Choose an enemy that is different than the last one spawned
-                lastEnemySpawnIndex = (Random.Range(0, _possibleEnemies.Count - 1) + lastEnemySpawnIndex + 1) %
-                                      _possibleEnemies.Count;
-                Enemy enemyToSpawn = _possibleEnemies[lastEnemySpawnIndex];
-                
+                int randomIndex = Random.Range(1, _possibleEnemies.Count) + lastEnemySpawnIndex;
+                randomIndex %= _possibleEnemies.Count;
+                Enemy enemyToSpawn = _possibleEnemies[randomIndex];
+                lastEnemySpawnIndex = randomIndex;
+
                 var playerPosition = _playerTrans.position;
                 var newEnemy = Instantiate(enemyToSpawn, transform);
                 _spawnedEnemies.Add(newEnemy);

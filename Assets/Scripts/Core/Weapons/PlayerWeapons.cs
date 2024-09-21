@@ -114,7 +114,7 @@ namespace Scripts.Core.Weapons {
         private void StartBombCooldown() {
             if (_lookingForBombRefresh) return; // This stops it if there is already a cooldown happening
             _bombCooldownTween?.Kill();
-            _bombCooldownTween = DOTween.To(()=>_bombCooldown.Value, x => _bombCooldown.SetValue(x), 0, 2.0f).From(1).SetEase(Ease.Linear);
+            _bombCooldownTween = DOTween.To(()=>_bombCooldown.Value, x => _bombCooldown.SetValue(x), 0, 3.5f).From(1).SetEase(Ease.Linear);
             _lookingForBombRefresh = true;
         }
 

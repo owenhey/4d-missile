@@ -11,6 +11,7 @@ namespace Scripts.Core.Credits {
     [RequireComponent(typeof(BoxCollider))]
     public class CreditBoxBehavior : MonoBehaviour {
         [SerializeField] private IntReference _playerCredits;
+        [SerializeField] private IntReference _playerCreditsThisLevel;
         [SerializeField] private BoxCollider _trigger;
 
         [SerializeField] private Transform[] _sidePanels;
@@ -27,6 +28,10 @@ namespace Scripts.Core.Credits {
 
         private void GiveCreditsToPlayer() {
             int randomCreditAmount = (int)(Random.Range(.75f, 1.25f) * CreditAmount);
+            // Factor makes it so the more you've gotten this round, it tones it down a little past 75
+            float factor = Helpers.RemapClamp(_playerCreditsThisLevel.Value, 75, 100, 1.0f, .5f);
+            randomCreditAmount = (int)(factor * randomCreditAmount);
+            _playerCreditsThisLevel.Add(randomCreditAmount);
             _playerCredits.Add(randomCreditAmount);
         }
 

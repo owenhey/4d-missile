@@ -204,6 +204,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCredits: {fileID: 11400000, guid: 4baea02403c8bff4fb770d6891c7aa22, type: 2}
+  _playerCreditsThisLevel: {fileID: 11400000, guid: f4e42ee81d9ff5943b2743acd006de6f,
+    type: 2}
   _trigger: {fileID: 6694882929008972471}
   _sidePanels:
   - {fileID: 7987293570745511510}

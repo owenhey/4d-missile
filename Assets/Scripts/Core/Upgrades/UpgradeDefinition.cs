@@ -11,6 +11,7 @@ namespace Scripts.Core.Upgrades {
         [SerializeField] private IntReference _levelToUpgrade;
         public IntReference LevelToUpgrade => _levelToUpgrade;
         public int BaseLevel;
+        public int MaxLevel = 1;
 
         public Sprite Icon;
         [TextArea(4,4)] public string Text;

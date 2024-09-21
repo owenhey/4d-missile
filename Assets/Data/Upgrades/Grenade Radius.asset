@@ -15,6 +15,7 @@ MonoBehaviour:
   UpgradeName: Grenade Size
   _levelToUpgrade: {fileID: 11400000, guid: 9556a65040e71664c9fadd8aa4804161, type: 2}
   BaseLevel: 0
+  MaxLevel: 6
   Icon: {fileID: 21300000, guid: 8c40162d8f3a96147b825968b54520b3, type: 3}
   Text: Increases the radius of your grenade
   Cost: 50
