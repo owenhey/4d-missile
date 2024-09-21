@@ -102,7 +102,7 @@ namespace Scripts.Core.Level {
         }
 
         public static FloatSpawnable[] GetCredits<T>(IEnumerable<T> obstacles) where T : IDataSpawnable{
-            const float CREDIT_CHANCE = .5f;
+            const float CREDIT_CHANCE = .4f;
             const float DOUBLE_CREDIT_CHANCE = .25f;
             const float TRIPLE_CREDIT_CHANCE = .1f;
             

@@ -42,6 +42,7 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 0337893a8c8f7e64ab6ce478fc088b6c, type: 3}
     - {fileID: 21300000, guid: 6683a63aa9ed5de48984091c0e3e5dc4, type: 3}
     - {fileID: 21300000, guid: 8c40162d8f3a96147b825968b54520b3, type: 3}
+    - {fileID: 21300000, guid: 1f20b1e5271d43e499bf472b705947dc, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -49,6 +50,7 @@ SpriteAtlas:
     - 153ac081208cbc34da65e9f62b0ce596: 21300000
     - b3784b340420fe049a6cc3e2e277e340: 21300000
     - e89f0fc440ce37347b43c8b09ac38003: 21300000
+    - 1f20b1e5271d43e499bf472b705947dc: 21300000
     - 2c998047293015e4699778daa0907a37: 21300000
     - 387190495388b2f4ba1760d2ab5c4850: 21300000
     - ad02b71ad99458d4c8b4eeb317cd0f37: 21300000
@@ -61,6 +63,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 153ac081208cbc34da65e9f62b0ce596, type: 3}
   - {fileID: 21300000, guid: b3784b340420fe049a6cc3e2e277e340, type: 3}
   - {fileID: 21300000, guid: e89f0fc440ce37347b43c8b09ac38003, type: 3}
+  - {fileID: 21300000, guid: 1f20b1e5271d43e499bf472b705947dc, type: 3}
   - {fileID: 21300000, guid: 2c998047293015e4699778daa0907a37, type: 3}
   - {fileID: 21300000, guid: 387190495388b2f4ba1760d2ab5c4850, type: 3}
   - {fileID: 21300000, guid: ad02b71ad99458d4c8b4eeb317cd0f37, type: 3}
@@ -72,6 +75,7 @@ SpriteAtlas:
   - speed_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48
   - health_and_safety_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48
   - sprint_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48
+  - Filled In Heart pink
   - bomb_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48
   - fast_forward_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48
   - add_circle_50dp_B87E9F_FILL0_wght400_GRAD0_opsz48

@@ -74,8 +74,9 @@ namespace Scripts.Core.Upgrades {
             foreach (var upgrade in _powerfulUpgrades) {
                 bool canShow = upgrade.LevelToUpgrade.Value == upgrade.BaseLevel;
                 
-                // Just hard code in this one
-                if (upgrade.UpgradeName == "Grenade Count") {
+                // Just hard code in these ones
+                bool forceShowUpgrades = upgrade.UpgradeName is "Grenade Count" or "Extra Life";
+                if (forceShowUpgrades) {
                     canShow = true;
                 }
                 

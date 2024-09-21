@@ -17,5 +17,15 @@ namespace Scripts.Misc {
                 list[i].gameObject.SetActive(i < targetCount);
             }
         }
+        
+        public static void EnsureEnoughElements<T>(this List<T> list, int targetCount) where T : MonoBehaviour {
+            for(int i = 0; i < Mathf.Max(targetCount, list.Count); i++) {
+                if (list.Count < targetCount) {
+                    T newMono = Object.Instantiate(list[0], list[0].transform.parent);
+                    list.Add(newMono);
+                    newMono.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace Scripts.Core.Level{
         [SerializeField] private GameObject _player;
         [SerializeField] private IntReference _currentLevel;
         [SerializeField] private FloatReference _endAnimationTime;
+        [SerializeField] private IntReference _playerLives;
         
         private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
         private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
@@ -97,7 +98,9 @@ namespace Scripts.Core.Level{
         }
 
         private void ObstaclePassHandler(bool isFinishLine) {
-            bool isValidWin = !_died && isFinishLine;
+            if (_died) return;
+            
+            bool isValidWin = isFinishLine;
             if (isValidWin) {
                 AfterPassFinish();
             }
@@ -126,6 +129,8 @@ namespace Scripts.Core.Level{
         }
         
         private void HandlePlayerDeath() {
+            _playerLives.Add(-1);
+            
             _died = true;
             DOTween.To(()=>_playerSpeed.Value, x => _playerSpeed.SetValue(x), 0, 1.0f);
         }

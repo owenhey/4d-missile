@@ -24,8 +24,8 @@ namespace Scripts.UI{
         [SerializeField] private Color _lowLevelColor;
         [SerializeField] private Color _highLevelColor;
 
-        private UpgradeDefinition _upgradeShowing;
-        public UpgradeDefinition GetUpgradeShowing() => _upgradeShowing;
+        private ShopUpgradeData _upgradeShowing;
+        public UpgradeDefinition GetUpgradeShowing() => _upgradeShowing.UpgradeDef;
 
         private void Awake() {
             _buyButton.onClick.AddListener(TryBuy);
@@ -33,7 +33,7 @@ namespace Scripts.UI{
         }
         
         public void Setup(ShopUpgradeData upgradeData, int playerCredits) {
-            _upgradeShowing = upgradeData.UpgradeDef;
+            _upgradeShowing = upgradeData;
             
             _optionTitleField.text = upgradeData.UpgradeDef.UpgradeName;
             _costField.text = "Credits: " + upgradeData.Cost;
@@ -53,13 +53,12 @@ namespace Scripts.UI{
             
             ShowBuyButton();
             RefreshBuyButton(_playerCredits.Value);
-
         }
 
         private void UpdateCurrentLevelUI() {
-            int baseLevel = _upgradeShowing.BaseLevel;
-            int currentLevel = _upgradeShowing.LevelToUpgrade.Value;
-            int maxLevel = _upgradeShowing.MaxLevel;
+            int baseLevel = _upgradeShowing.UpgradeDef.BaseLevel;
+            int currentLevel = _upgradeShowing.UpgradeDef.LevelToUpgrade.Value;
+            int maxLevel = _upgradeShowing.UpgradeDef.MaxLevel;
             float t = Helpers.RemapClamp(currentLevel, baseLevel, maxLevel, 0, 1);
             Color color = Color.Lerp(_lowLevelColor, _highLevelColor, t);
             
@@ -70,18 +69,18 @@ namespace Scripts.UI{
         }
 
         private void RefreshBuyButton(int numCredits) {
-            bool canBuy = _playerCredits.Value >= GetUpgradeShowing().Cost;
+            bool canBuy = _playerCredits.Value >= _upgradeShowing.Cost;
             _cg.interactable = canBuy;
         }
 
         private void TryBuy() {
             int playerCredits = _playerCredits.Value;
-            int cost = GetUpgradeShowing().Cost;
+            int cost = _upgradeShowing.Cost;
 
             if (playerCredits < cost) return;
             
-            _playerCredits.Add(-GetUpgradeShowing().Cost);
-            GetUpgradeShowing().Upgrade(1);
+            _playerCredits.Add(-_upgradeShowing.Cost);
+            _upgradeShowing.UpgradeDef.Upgrade(_upgradeShowing.LevelsToUpgrade);
             ShowPurchased();
             UpdateCurrentLevelUI();
         }
