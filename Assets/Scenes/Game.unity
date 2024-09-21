@@ -1534,9 +1534,6 @@ MonoBehaviour:
     type: 2}
   _maxHealthCalculator: {fileID: 11400000, guid: f1eeef5f337d657469bf173d3f43393c,
     type: 2}
-  _dashLevel: {fileID: 11400000, guid: f5a8eeb01fe41f7449528fb72098717e, type: 2}
-  _dashCooldown: {fileID: 11400000, guid: da3105c7781d06e4ea877e2b7222c0dd, type: 2}
-  _dashCharges: {fileID: 11400000, guid: d1cff22428805534aae7168d79d7fd4d, type: 2}
   _playerHealth: {fileID: 11400000, guid: 66aa8a3b95b762146983449678aafa35, type: 2}
   CanMoveWithMouse: 1
 --- !u!136 &218139525
@@ -1614,6 +1611,10 @@ MonoBehaviour:
   _timeLevel: {fileID: 11400000, guid: f70875d1fa9a4634da455c45a2280364, type: 2}
   _timeSlowCount: {fileID: 11400000, guid: 1ce4615a2604aaa419497801d020f11a, type: 2}
   _timeCooldown: {fileID: 11400000, guid: 4da74f07eb6ffdb428ae93ec4b4fed4c, type: 2}
+  _nearbyBombLevel: {fileID: 11400000, guid: f5a8eeb01fe41f7449528fb72098717e, type: 2}
+  _nearbyBombCooldown: {fileID: 11400000, guid: da3105c7781d06e4ea877e2b7222c0dd,
+    type: 2}
+  _nearbyBombCharges: {fileID: 11400000, guid: d1cff22428805534aae7168d79d7fd4d, type: 2}
 --- !u!1 &223396035
 GameObject:
   m_ObjectHideFlags: 0
@@ -10187,6 +10188,8 @@ MonoBehaviour:
   _bombPositionMarker: {fileID: 8310241849658867663, guid: 24248c0cb1a27c847bdf059f7e352384,
     type: 3}
   _bigExplosion: {fileID: 7897676161888875145, guid: 4bfd184bf598af44aa739f6602f86507,
+    type: 3}
+  _nearbyBombExplosion: {fileID: 7897676161888875145, guid: 5cfcce7fe419e5d4fae134eab6719933,
     type: 3}
   _player: {fileID: 218139524}
   _dotsPS: {fileID: 1844125654}
@@ -19026,6 +19029,7 @@ MonoBehaviour:
   _currentLevel: {fileID: 11400000, guid: b5858ee09625f9e44bcd28aa091057ef, type: 2}
   _endAnimationTime: {fileID: 11400000, guid: d61b2bfe57a273743b3a00632fe69e54, type: 2}
   _playerLives: {fileID: 11400000, guid: ed1d246b10f0c46459ebe978a6f5c1d3, type: 2}
+  _credits: {fileID: 0}
 --- !u!114 &1838888814
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42f56a625a9adbc42b5a835472737555, type: 3}
-  m_Name: Dash
+  m_Name: Nearby Bomb
   m_EditorClassIdentifier: 
-  UpgradeName: Dash
+  UpgradeName: Nearby Bomb
   _levelToUpgrade: {fileID: 11400000, guid: f5a8eeb01fe41f7449528fb72098717e, type: 2}
-  Icon: {fileID: 21300000, guid: e89f0fc440ce37347b43c8b09ac38003, type: 3}
-  Text: Dash quickly, destroying enemies along the path
-  Cost: 50
+  BaseLevel: 0
+  MaxLevel: 1
+  Icon: {fileID: 21300000, guid: af8d9b9c1afff404f8d98a6c5ca4792b, type: 3}
+  Text: Deal damage to enemies around you (Left Shift)
+  Cost: 100

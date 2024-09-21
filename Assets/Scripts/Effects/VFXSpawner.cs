@@ -11,6 +11,7 @@ namespace Scripts.Effects {
     public class VFXSpawner : MonoBehaviour {
         [SerializeField] private GameObject _bombPositionMarker;
         [SerializeField] private GameObject _bigExplosion;
+        [SerializeField] private GameObject _nearbyBombExplosion;
         [SerializeField] private Movement _player;
         
 
@@ -49,12 +50,19 @@ namespace Scripts.Effects {
             velOverTime = _linesPS.velocityOverLifetime;
             velOverTime.z = -newSpeed;
         }
+        
+        private void HandleNearbyBomb(Vector3 pos) {
+            GameObject bigExplosion = Instantiate(_nearbyBombExplosion, transform);
+            bigExplosion.transform.position = pos;
+            Destroy(bigExplosion, 2);
+        }
 
         private void HandleGameStateChange(GameState state) {
             if (state == GameState.Game) {
                 _dotsPS.Play();
             }
         }
+        
 
         private void Awake() {
             GameManager.OnGameStateChange += HandleGameStateChange;
@@ -64,6 +72,7 @@ namespace Scripts.Effects {
             PlayerWeapons.OnBombThrow += HandleBombThrow;
             Movement.OnPlayerDeath += HandlePlayerDeath;
             _playerSpeed.OnValueChanged += HandlePlayerSpeedChange;
+            PlayerWeapons.OnNearbyBomb += HandleNearbyBomb;
             
             HandlePlayerSpeedChange(_playerSpeed.Value);
         }
@@ -72,6 +81,7 @@ namespace Scripts.Effects {
             PlayerWeapons.OnBombThrow -= HandleBombThrow;
             Movement.OnPlayerDeath -= HandlePlayerDeath;
             _playerSpeed.OnValueChanged -= HandlePlayerSpeedChange;
+            PlayerWeapons.OnNearbyBomb += HandleNearbyBomb;
         }
     }
 }

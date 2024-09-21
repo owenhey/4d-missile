@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Scripts.Core.Enemies;
 using Scripts.Utils;
 using UnityEngine;
 
@@ -20,6 +21,15 @@ namespace Scripts.Core.Weapons {
         [SerializeField] private IntReference _timeSlowCount;
         [SerializeField] private FloatReference _timeCooldown;
         
+        [Header("Nearby Bomb")] 
+        [SerializeField] private IntReference _nearbyBombLevel;
+        [SerializeField] private FloatReference _nearbyBombCooldown;
+        [SerializeField] private IntReference _nearbyBombCharges;
+        private Tween _nearbyBombTween;
+        private bool _watchingNearbyBombCooldown = false;
+        
+        
+        
         private Camera _camera;
         
         private bool _lookingForBombRefresh = false;
@@ -31,7 +41,8 @@ namespace Scripts.Core.Weapons {
         
         public static Collider[] HitColliders = new Collider[8];
         
-        public static System.Action<Vector3> OnBombThrow;
+        public static Action<Vector3> OnNearbyBomb;
+        public static Action<Vector3> OnBombThrow;
 
         private void Start() {
             _camera = Camera.main;
@@ -41,11 +52,13 @@ namespace Scripts.Core.Weapons {
         private void OnEnable() {
             _bombCooldown.OnValueChanged += HandleBombCooldown;
             _timeCooldown.OnValueChanged += HandleTimeSlowDuration;
+            _nearbyBombCooldown.OnValueChanged += HandleNearbyBombChange;
         }
 
         private void OnDisable() {
             _bombCooldown.OnValueChanged -= HandleBombCooldown;
             _timeCooldown.OnValueChanged -= HandleTimeSlowDuration;
+            _nearbyBombCooldown.OnValueChanged -= HandleNearbyBombChange;
         }
 
         private void HandleGameStateChange(GameState newState) {
@@ -61,6 +74,22 @@ namespace Scripts.Core.Weapons {
                 bool hasTimeSlowAbility = _timeLevel.Value > 0;
                 _timeSlowCount.SetValue(hasTimeSlowAbility ? 1 : 0);
                 _timeSlowTween?.Kill();
+                
+                _nearbyBombCooldown.SetValue(0);
+                bool hasNearbyBomb = _nearbyBombLevel.Value > 0;
+                _nearbyBombCharges.SetValue(hasNearbyBomb ? 1 : 0);
+                _nearbyBombTween?.Kill();
+            }
+        }
+        
+        private void HandleNearbyBombChange(float cooldownRemaining) {
+            if (!_watchingNearbyBombCooldown) return;
+            
+            bool valueIsBasicallyZero = Mathf.Abs(cooldownRemaining) < .001f;
+            if (valueIsBasicallyZero) {
+                _watchingNearbyBombCooldown = false;
+                _nearbyBombCooldown.SetValue(0);
+                _nearbyBombCharges.Add(1);
             }
         }
 
@@ -77,7 +106,34 @@ namespace Scripts.Core.Weapons {
             if (tryToTimeSlow && canTimeSlow) {
                 TimeSlow();
             }
+            
+            bool canNearbyBomb = _nearbyBombCharges.Value > 0;
+            if (canNearbyBomb && Input.GetKeyDown(KeyCode.LeftShift)) {
+                NearbyBomb();
+            }
         }
+        
+        private void NearbyBomb() {
+            OnNearbyBomb?.Invoke(transform.position);
+            
+            // Damage in area around 
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 2.5f, HitColliders, Enemy.EnemyMask);
+            for (int i = 0; i < numColliders; i++) {
+                if(HitColliders[i].TryGetComponent(out Enemy e)){
+                    e.Damage(100);
+                }
+            }
+            
+            // Decrement charges
+            _nearbyBombCharges.Add(-1);
+            
+            // Cooldown
+            _nearbyBombTween?.Kill();
+            _nearbyBombTween = DOTween.To(() => _nearbyBombCooldown.Value, x => _nearbyBombCooldown.SetValue(x), 0, 5.0f).From(1)
+                .SetEase(Ease.Linear).SetUpdate(true);
+            _watchingNearbyBombCooldown = true;
+        }
+        
 
         private void TimeSlow() {
             Time.timeScale = .5f;
