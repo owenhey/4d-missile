@@ -25,6 +25,8 @@ namespace Scripts.Core.Obstacles {
         private int _randomRotateDirection;
         private Movement _playerMovement;
 
+        private static int _lastObstacleChosen = -1;
+
         private void Awake() {
             _trans = transform;
             _playerMovement = GameObject.FindFirstObjectByType<Movement>();
@@ -32,9 +34,10 @@ namespace Scripts.Core.Obstacles {
         }
 
         private void Start() {
-            int ranChosen = Random.Range(0, _colliderOptions.Length);
+            _lastObstacleChosen = (_lastObstacleChosen + Random.Range(1, _colliderOptions.Length)) %
+                                  _colliderOptions.Length;
             for (int i = 0; i < _colliderOptions.Length; i++) {
-                _colliderOptions[i].gameObject.SetActive(i == ranChosen);
+                _colliderOptions[i].gameObject.SetActive(i == _lastObstacleChosen);
             }
 
             _hiders = _trans.GetComponentsInChildren<ObstacleHider>();
@@ -48,6 +51,8 @@ namespace Scripts.Core.Obstacles {
         }
 
         public void CollideWithPlayer() {
+            if (_hitPlayer) return;
+            
             _hitPlayer = true;
             int damage = 30 + (_currentLevel.Value - 1) * 4;
             _playerMovement.TakeDamage(damage);

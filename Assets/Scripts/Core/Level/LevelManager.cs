@@ -93,7 +93,7 @@ namespace Scripts.Core.Level{
         }
 
         private void SpawnEnemy(EnemySpawnable spawnable) {
-            _enemySpawner.Spawn(spawnable.NumberToSpawn);
+            _enemySpawner.Spawn(spawnable.NumberToSpawn, spawnable.Harder);
         }
 
         private void UpdateSpeed() {

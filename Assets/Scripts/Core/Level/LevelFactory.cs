@@ -76,7 +76,7 @@ namespace Scripts.Core.Level {
         }
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
-            int startSpeed = (int)((level - 1) * 4.5f) + 20; // Goes from 20 to 65
+            int startSpeed = (int)((level - 1) * 4.0f) + 20; // Goes from 20 to 64
             int endSpeed = (int)(startSpeed * 1.4f); 
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
@@ -107,9 +107,9 @@ namespace Scripts.Core.Level {
         }
 
         public static FloatSpawnable[] GetCredits<T>(IEnumerable<T> obstacles) where T : IDataSpawnable{
-            const float CREDIT_CHANCE = .4f;
-            const float DOUBLE_CREDIT_CHANCE = .25f;
-            const float TRIPLE_CREDIT_CHANCE = .1f;
+            const float CREDIT_CHANCE = .35f;
+            const float DOUBLE_CREDIT_CHANCE = .15f;
+            const float TRIPLE_CREDIT_CHANCE = .05f;
             
             List<FloatSpawnable> credits = new();
             // This just prevents from enumerating it many times
@@ -158,6 +158,8 @@ namespace Scripts.Core.Level {
                 numEnemies = (int)(numEnemies * 1.5f);
             }
 
+            bool harderEnemies = modifiers.HasFlag(LevelModifiers.HarderEnemies);
+
             const float startCap = 100;
             const float endCap = 200;
 
@@ -166,7 +168,7 @@ namespace Scripts.Core.Level {
             
             var floatArray = CreateEvenlySpacedArray(100, spaceBetweenEnemies, numEnemies).ToList();
             // Just put 1 as everything to start
-            List<EnemySpawnable> enemyList = floatArray.Select(x => new EnemySpawnable(x.GetDistance(), 1)).ToList();
+            List<EnemySpawnable> enemyList = floatArray.Select(x => new EnemySpawnable(x.GetDistance(), 1, harderEnemies)).ToList();
             
             // Calculate a few places to spawn in more enemies (2 or 3 enemies at once)
             int numDoubleEnemies = 0;
@@ -189,14 +191,14 @@ namespace Scripts.Core.Level {
             int randomStartIndex = Random.Range(0, enemyList.Count);
             for (int i = 0; i < numDoubleEnemies; i++) {
                 int insertionIndex = (randomStartIndex + (i * 2)) % enemyList.Count;
-                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2);
+                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2, harderEnemies);
             }
             
             // Insert the triple enemies
             randomStartIndex = Random.Range(0, enemyList.Count);
             for (int i = 0; i < numTripleEnemies; i++) {
                 int insertionIndex = (randomStartIndex + (i * 2)) % enemyList.Count;
-                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2);
+                enemyList[insertionIndex] = new EnemySpawnable(enemyList[insertionIndex].GetDistance(), 2, harderEnemies);
             }
             
             return enemyList.ToArray();
@@ -242,8 +244,9 @@ namespace Scripts.Core.Level {
 
     public class EnemySpawnable : FloatSpawnable {
         public int NumberToSpawn;
+        public bool Harder;
 
-        public EnemySpawnable(float dis, int num) : base(dis) {
+        public EnemySpawnable(float dis, int num, bool harder) : base(dis) {
             NumberToSpawn = num;
         }
     }

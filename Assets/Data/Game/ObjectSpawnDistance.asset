@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abaab398190b4c248277363588f960f8, type: 3}
   m_Name: ObjectSpawnDistance
   m_EditorClassIdentifier: 
-  _value: 70
+  _value: 85
   _useStartValue: 0
   _startValue: 0

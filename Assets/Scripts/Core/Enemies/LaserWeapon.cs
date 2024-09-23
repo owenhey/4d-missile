@@ -8,7 +8,11 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private Transform _laser;
         [SerializeField] private float _laserDelayTime;
         [SerializeField] private DamagePlayerCollider _damagePlayerCollider;
-        
+
+        private void Awake() {
+            float factor = _harder ? _harderFactor : 1.0f;
+            _laserDelayTime *= factor;
+        }
         
         protected override void FireWeapon() {
             StartCoroutine(FireLaser());

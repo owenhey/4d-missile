@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Scripts.Core;
@@ -64,6 +65,7 @@ namespace Scripts.UI {
                 for (int i = 1; i < _modifierList.Length; i++) {
                     _modifierList[i].Parent.gameObject.SetActive(false);
                 }
+                LayoutRebuildModifierList();
                 return;
             }
 
@@ -79,6 +81,7 @@ namespace Scripts.UI {
                 for (int i = 1; i < _modifierList.Length; i++) {
                     _modifierList[i].Parent.gameObject.SetActive(false);
                 }
+                LayoutRebuildModifierList();
                 return;
             }
 
@@ -97,12 +100,16 @@ namespace Scripts.UI {
                 });
             }
 
+            LayoutRebuildModifierList();
+        }
+
+        private void LayoutRebuildModifierList() {
             foreach (var modItem in _modifierList) {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(modItem.Text.transform as RectTransform);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(modItem.Parent);
             }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_modifierList[0].Parent.transform.parent as RectTransform);
         }
-        
+
         private void OnShopRefreshClick() {
             _playerCredits.Add(-30);
             _shopManager.RefreshShop();

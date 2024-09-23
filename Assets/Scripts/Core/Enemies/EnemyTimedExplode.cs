@@ -17,6 +17,8 @@ namespace Scripts.Core.Enemies {
         private static readonly int T = Shader.PropertyToID("_T");
 
         private void Awake() {
+            float factor = _harder ? _harderFactor : 1.0f;
+            _timeToExplode *= factor;
             CopyAndAssignMaterial();
         }
 

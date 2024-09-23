@@ -19,7 +19,7 @@ namespace Scripts.Core.Enemies {
         private List<Enemy> _spawnedEnemies = new();
         private int lastEnemySpawnIndex = -1;
 
-        public void Spawn(int num) {
+        public void Spawn(int num, bool harder) {
             IEnumerator DelayedSpawn() {
                 yield return new WaitForSeconds(Random.Range(0.0f, 1.0f));
 
@@ -31,6 +31,7 @@ namespace Scripts.Core.Enemies {
 
                 var playerPosition = _playerTrans.position;
                 var newEnemy = Instantiate(enemyToSpawn, transform);
+                newEnemy.Harder = harder;
                 _spawnedEnemies.Add(newEnemy);
             
                 Vector3 spawnPosition = Random.insideUnitCircle * _validSpawnRadius.Value;

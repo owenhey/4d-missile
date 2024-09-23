@@ -17,7 +17,9 @@ namespace Scripts.Core.Enemies {
         
         
         public static LayerMask EnemyMask = 1 << 7; // only enemy mask
-        public static LayerMask PlayerMask = 1 << 8;        
+        public static LayerMask PlayerMask = 1 << 8;
+
+        public bool Harder;
 
         private void Awake() {
             PlayerTrans = GameObject.FindFirstObjectByType<Movement>(FindObjectsInactive.Include).transform;
