@@ -47,6 +47,8 @@ namespace Scripts.UI {
         }
 
         private void UpdateModifierText() {
+            Debug.Log("Updating Modifier Text!");
+            
             _modifierTitleField.Text.DOFade(1.0f, .3f).From(0).SetDelay(.75f);
             _modifierTitleField.Parent.transform.DOScale(Vector3.one * 1.25f, .15f).SetDelay(.75f).OnComplete(() => {
                 _modifierTitleField.Parent.transform.DOScale(Vector3.one, .15f);
@@ -71,11 +73,11 @@ namespace Scripts.UI {
 
             if (currentLevelData.Modifiers.Count == 4) {
                 _modifierList[0].Text.text = "Hell";
-                _modifierList[0].Text.color = Color.white;
+                _modifierList[0].Text.color = new Color(.75f, 0, 0, 1);
                 _modifierList[0].Parent.gameObject.SetActive(true);
                 _modifierList[0].Text.DOFade(1.0f, .3f).From(0).SetDelay(1.25f);
-                _modifierList[0].Parent.transform.DOScale(Vector3.one * 1.4f, .15f).SetDelay(1.25f).OnComplete(() => {
-                    _modifierList[0].Parent.transform.DOScale(Vector3.one, .15f);
+                _modifierList[0].Parent.transform.DOScale(Vector3.one * 1.75f, .2f).SetDelay(1.25f).OnComplete(() => {
+                    _modifierList[0].Parent.transform.DOScale(Vector3.one, .2f);
                 });
 
                 for (int i = 1; i < _modifierList.Length; i++) {

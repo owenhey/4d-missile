@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Scripts.Misc;
 using Scripts.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Scripts.Core.Upgrades {
     public struct ShopUpgradeData {
@@ -88,9 +90,23 @@ namespace Scripts.Core.Upgrades {
             return possibleUpgrades.GetRandom();
         }
 
-        public void PurchaseUpgrade(UpgradeDefinition upgrade) {
-            upgrade.Upgrade(1);
-            _playerCredits.Add(-upgrade.Cost);
+        private void HandleGameReset() {
+            foreach (var upgrade in _regularUpgrades) {
+                upgrade.LevelToUpgrade.SetValue(upgrade.BaseLevel);
+            }
+            foreach (var upgrade in _powerfulUpgrades) {
+                upgrade.LevelToUpgrade.SetValue(upgrade.BaseLevel);
+            }
+            
+            _playerCredits.SetValue(50);
+        }
+        
+        private void Awake() {
+            GameManager.OnGameReset += HandleGameReset;
+        }
+
+        private void OnDestroy() {
+            GameManager.OnGameReset -= HandleGameReset;
         }
     }
 }

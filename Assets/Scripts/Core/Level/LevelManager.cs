@@ -123,17 +123,13 @@ namespace Scripts.Core.Level{
         }
 
         private void AdvanceFromLevel() {
+            _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
             GameManager.ChangeGameState(GameState.PreGame);
         }
 
         private void HandleGameStateChange(GameState state) {
             bool isLevel = state == GameState.Game;
             gameObject.SetActive(isLevel);
-
-            bool isPregame = state == GameState.PreGame;
-            if (isPregame) {
-                _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
-            }
         }
         
         private void HandlePlayerDeath() {
@@ -146,12 +142,17 @@ namespace Scripts.Core.Level{
         private void HandleTakeDamage(float damage) {
             _damageTakenThisRun += damage;
         }
+
+        private void HandleGameReset() {
+            _currentLevel.SetValue(1);
+        }
         
         private void Awake() {
             ObstacleBehavior.OnObstaclePass += ObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
             Movement.OnPlayerDeath += HandlePlayerDeath;
             Movement.OnTakeDamage += HandleTakeDamage;
+            GameManager.OnGameReset += HandleGameReset;
         }
 
         private void OnDestroy() {
@@ -159,6 +160,7 @@ namespace Scripts.Core.Level{
             GameManager.OnGameStateChange -= HandleGameStateChange;
             Movement.OnPlayerDeath -= HandlePlayerDeath;
             Movement.OnTakeDamage -= HandleTakeDamage;
+            GameManager.OnGameReset -= HandleGameReset;
         }
     }
 }
