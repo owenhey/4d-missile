@@ -30,8 +30,8 @@ namespace Scripts.Core.Credits {
 
         private void GiveCreditsToPlayer() {
             int randomCreditAmount = (int)(Random.Range(.75f, 1.25f) * CreditAmount);
-            // Factor makes it so the more you've gotten this round, it tones it down a little past 70
-            float factor = Helpers.RemapClamp(_playerCreditsThisLevel.Value, 70, 100, 1.0f, .5f);
+            // Factor makes it so the more you've gotten this round, it tones it down a little past 50
+            float factor = Helpers.RemapClamp(_playerCreditsThisLevel.Value, 50, 75, 1.0f, .5f);
             randomCreditAmount = (int)(factor * randomCreditAmount);
             _playerCreditsThisLevel.Add(randomCreditAmount);
             _playerCredits.Add(randomCreditAmount);

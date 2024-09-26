@@ -12,7 +12,8 @@ namespace Scripts.Core.Enemies {
         
         protected override void FireWeapon() {
             Vector3 playerPos = _baseEnemy.PlayerTrans.position;
-            Instantiate(_bombPrefab).Setup(transform.position, playerPos, _bombTravelTime, _bombDelayTime);
+            float timeFactor = _baseEnemy.Harder ? _harderFactor : 1.0f;
+            Instantiate(_bombPrefab).Setup(transform.position, playerPos, _bombTravelTime * timeFactor, _bombDelayTime * timeFactor);
         }
     }
 }

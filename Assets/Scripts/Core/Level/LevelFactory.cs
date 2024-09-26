@@ -85,7 +85,7 @@ namespace Scripts.Core.Level {
         }
 
         private static ObstacleSpawnable[] GetObstacles(int level, float averageSpeed, LevelModifiers modifiers) {
-            return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
+            // return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
             
             bool hasLongerModifier = modifiers.HasFlag(LevelModifiers.Longer);
             float totalDistance = averageSpeed * (hasLongerModifier ? 45 : 60);
@@ -114,6 +114,7 @@ namespace Scripts.Core.Level {
             List<FloatSpawnable> credits = new();
             // This just prevents from enumerating it many times
             var dataSpawnables = obstacles as T[] ?? obstacles.ToArray();
+            int doubleCount = 0, tripleCount = 0;
             for (int i = 1; i < dataSpawnables.Count() - 1; i++) {
                 float obstacleStart = dataSpawnables.ElementAt(i).GetDistance();
                 float nextObstacle = dataSpawnables.ElementAt(i + 1).GetDistance();
@@ -126,12 +127,14 @@ namespace Scripts.Core.Level {
                         credits.Add(Mathf.Lerp(obstacleStart, nextObstacle, randomPosition1));
                         credits.Add(Mathf.Lerp(obstacleStart, nextObstacle, randomPosition2));
                         credits.Add(Mathf.Lerp(obstacleStart, nextObstacle, randomPosition3));
+                        tripleCount++;
                     }
                     else if (Ran01 < DOUBLE_CREDIT_CHANCE) {
                         float randomPosition1 = Random.Range(.2f, .45f);
                         float randomPosition2 = Random.Range(.55f, .8f);
                         credits.Add(Mathf.Lerp(obstacleStart, nextObstacle, randomPosition1));
                         credits.Add(Mathf.Lerp(obstacleStart, nextObstacle, randomPosition2));
+                        doubleCount++;
                     }
                     else {
                         // Just a single one
@@ -140,6 +143,8 @@ namespace Scripts.Core.Level {
                     }
                 }
             }
+            
+            Debug.Log($"Double credit count: {doubleCount}. Triple Count: {tripleCount}");
 
             return credits.ToArray();
         }
@@ -186,7 +191,7 @@ namespace Scripts.Core.Level {
             if (level > 8) {
                 numTripleEnemies = hasMoreEnemies ? level - 7 : (level - 7) / 2;
             }
-
+            
             // Insert the double enemies
             int randomStartIndex = Random.Range(0, enemyList.Count);
             for (int i = 0; i < numDoubleEnemies; i++) {
@@ -248,6 +253,7 @@ namespace Scripts.Core.Level {
 
         public EnemySpawnable(float dis, int num, bool harder) : base(dis) {
             NumberToSpawn = num;
+            Harder = harder;
         }
     }
 

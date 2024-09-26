@@ -61,6 +61,7 @@ namespace Scripts.Core.Level{
             _died = false;
             _damageTakenThisRun = 0;
             _creditsThisRun = 0;
+            _obstacleTurnSpeed.SetValue(15 + _currentLevel.Value);
             
             _obstacleSpawner.DestroyAllObstacles();
             _creditSpawner.DestroyAllCredits();

@@ -70,10 +70,14 @@ namespace Scripts.Core.Upgrades {
 
             OnShopRefresh?.Invoke(chosenUpgrades.ToArray());
         }
-        
+
+
+        private Queue<UpgradeDefinition> _lastChosenPowerfulUpgrades = new();
         private UpgradeDefinition GetRandomPowerfulUpgrade() {
             List<UpgradeDefinition> possibleUpgrades = new List<UpgradeDefinition>(_powerfulUpgrades.Length);
             foreach (var upgrade in _powerfulUpgrades) {
+                if (_lastChosenPowerfulUpgrades.Contains(upgrade)) continue;
+                
                 bool canShow = upgrade.LevelToUpgrade.Value == upgrade.BaseLevel;
                 
                 // Just hard code in these ones
@@ -87,7 +91,14 @@ namespace Scripts.Core.Upgrades {
                 }
             }
 
-            return possibleUpgrades.GetRandom();
+            // This makes sure you are mostly getting ones you haven't seen before
+            var chosen = possibleUpgrades.GetRandom();
+            if (_lastChosenPowerfulUpgrades.Count > 2) {
+                _lastChosenPowerfulUpgrades.Dequeue();
+            }
+            _lastChosenPowerfulUpgrades.Enqueue(chosen);
+
+            return chosen;
         }
 
         private void HandleGameReset() {
