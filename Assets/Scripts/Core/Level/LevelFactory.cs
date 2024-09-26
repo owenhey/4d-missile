@@ -85,7 +85,7 @@ namespace Scripts.Core.Level {
         }
 
         private static ObstacleSpawnable[] GetObstacles(int level, float averageSpeed, LevelModifiers modifiers) {
-            // return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
+            return new ObstacleSpawnable[] { new ObstacleSpawnable(30, true) };
             
             bool hasLongerModifier = modifiers.HasFlag(LevelModifiers.Longer);
             float totalDistance = averageSpeed * (hasLongerModifier ? 45 : 60);

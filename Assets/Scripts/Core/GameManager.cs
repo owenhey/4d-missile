@@ -9,7 +9,8 @@ namespace Scripts.Core {
     public enum GameState {
         PreGame,
         Game,
-        Lose
+        Lose,
+        PostGame
     }
     public class GameManager : MonoBehaviour {
         [SerializeField] private ShopManager _shopManager;
@@ -19,7 +20,6 @@ namespace Scripts.Core {
         public static Action OnGameReset;
         
         private static GameManager _instance;
-        
 
         private void OnPreGame() {
             _shopManager.RefreshShop();
@@ -30,7 +30,7 @@ namespace Scripts.Core {
         }
         
         private void Start() {
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 120;
             _instance = this;
             ChangeGameState(GameState.PreGame);
         }

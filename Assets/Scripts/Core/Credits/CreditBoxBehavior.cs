@@ -17,6 +17,8 @@ namespace Scripts.Core.Credits {
         [SerializeField] private Transform[] _sidePanels;
         
         public int CreditAmount = 10;
+
+        public static Action<int> OnCreditBoxCollected;
         
         private void OnTriggerEnter(Collider other) {
             if (other.CompareTag("Player")) {
@@ -33,6 +35,7 @@ namespace Scripts.Core.Credits {
             randomCreditAmount = (int)(factor * randomCreditAmount);
             _playerCreditsThisLevel.Add(randomCreditAmount);
             _playerCredits.Add(randomCreditAmount);
+            OnCreditBoxCollected?.Invoke(randomCreditAmount);
         }
 
         private void DestroyAnimation() {

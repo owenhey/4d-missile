@@ -17,7 +17,7 @@ namespace Scripts.Core.Level{
         [SerializeField] private IntReference _currentLevel;
         [SerializeField] private FloatReference _endAnimationTime;
         [SerializeField] private IntReference _playerLives;
-        [SerializeField] private IntReference _credits;
+        [SerializeField] private FloatReference _obstacleTurnSpeed;
         
         private SpawnAfterDistance<ObstacleSpawnable> _obstacleSpawnBehav;
         private SpawnAfterDistance<FloatSpawnable> _creditsSpawnBehav;
@@ -27,9 +27,12 @@ namespace Scripts.Core.Level{
         private float _totalDistance;
         private bool _died; // Keeps track of whether the player has died
         private float _damageTakenThisRun;
+        private int _creditsThisRun;
+        private bool _previousCredits;
         
         public Action OnWin;
-        public Action OnFlawlessWin;
+
+        public LevelPerformanceData LastLevelPerformanceData;
 
         public LevelData CurrentLevelData => GetCurrentLevelData();
         private LevelData _currentLevelData;
@@ -57,6 +60,7 @@ namespace Scripts.Core.Level{
             _playerSpeed.SetValue(levelData.StartingSpeed);
             _died = false;
             _damageTakenThisRun = 0;
+            _creditsThisRun = 0;
             
             _obstacleSpawner.DestroyAllObstacles();
             _creditSpawner.DestroyAllCredits();
@@ -113,18 +117,16 @@ namespace Scripts.Core.Level{
         private void AfterPassFinish() {
             OnWin?.Invoke();
             _obstacleSpawner.DestroyAllObstacles();
-            _currentLevel.Add(1);
-            if (_damageTakenThisRun == 0) {
-                OnFlawlessWin?.Invoke();
-                _credits.Add(25);
-            }
+
+            LastLevelPerformanceData = new(_currentLevel.Value, true, _creditsThisRun, (int)_damageTakenThisRun);
             
             Invoke(nameof(AdvanceFromLevel), _endAnimationTime.Value);
         }
 
         private void AdvanceFromLevel() {
+            _currentLevel.Add(1);
             _currentLevelData = LevelFactory.GenerateLevel(_currentLevel.Value);
-            GameManager.ChangeGameState(GameState.PreGame);
+            GameManager.ChangeGameState(GameState.PostGame);
         }
 
         private void HandleGameStateChange(GameState state) {
@@ -143,16 +145,21 @@ namespace Scripts.Core.Level{
             _damageTakenThisRun += damage;
         }
 
+        private void HandleCreditsCollected(int credits) {
+            _creditsThisRun += credits;
+        }
+
         private void HandleGameReset() {
             _currentLevel.SetValue(1);
         }
-        
+
         private void Awake() {
             ObstacleBehavior.OnObstaclePass += ObstaclePassHandler;
             GameManager.OnGameStateChange += HandleGameStateChange;
             Movement.OnPlayerDeath += HandlePlayerDeath;
             Movement.OnTakeDamage += HandleTakeDamage;
             GameManager.OnGameReset += HandleGameReset;
+            CreditBoxBehavior.OnCreditBoxCollected += HandleCreditsCollected;
         }
 
         private void OnDestroy() {
@@ -161,6 +168,7 @@ namespace Scripts.Core.Level{
             Movement.OnPlayerDeath -= HandlePlayerDeath;
             Movement.OnTakeDamage -= HandleTakeDamage;
             GameManager.OnGameReset -= HandleGameReset;
+            CreditBoxBehavior.OnCreditBoxCollected -= HandleCreditsCollected;
         }
     }
 }
