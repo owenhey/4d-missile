@@ -77,7 +77,7 @@ namespace Scripts.Core.Level {
         }
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
-            int startSpeed = (int)((level - 1) * 4.0f) + 20; // Goes from 20 to 64
+            int startSpeed = (int)((level - 1) * 3.5f) + 20; // Goes from 20 to 64
             int endSpeed = (int)(startSpeed * 1.25f); 
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
@@ -201,7 +201,7 @@ namespace Scripts.Core.Level {
                 numTripleEnemies = 2;
             }
             if (level > 8) {
-                numTripleEnemies = hasMoreEnemies ? level - 7 : (level - 7) / 2;
+                numTripleEnemies = hasMoreEnemies ? (level - 7) / 2 : (level - 7) / 3;
             }
             
             // Insert the double enemies

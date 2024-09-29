@@ -160,7 +160,7 @@ namespace Scripts.Core.Level{
         private void HandleObstacleHit() {
             _speedMultiplierTween?.Kill();
             _speedMultiplierTween =
-                DOTween.To(() => _speedMultiplier, (x) => _speedMultiplier = x, 1.0f, .75f).From(.75f);
+                DOTween.To(() => _speedMultiplier, (x) => _speedMultiplier = x, 1.0f, 1.0f).From(.6f);
         }
 
         private void Awake() {
