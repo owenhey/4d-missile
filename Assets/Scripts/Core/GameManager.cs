@@ -52,8 +52,8 @@ namespace Scripts.Core {
         }
 
         public static void ResetGame() {
-            ChangeGameState(GameState.PreGame);
             OnGameReset?.Invoke();
+            ChangeGameState(GameState.PreGame);
         }
     }
 }

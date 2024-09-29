@@ -17,7 +17,10 @@ namespace Scripts.Core.Upgrades {
         [TextArea(4,4)] public string Text;
         [Min(0)] public int Cost = 50;
 
+        public static System.Action OnUpgrade;
+        
         public void Upgrade(int levels) {
+            OnUpgrade?.Invoke();
             _levelToUpgrade.Add(levels);
         }
     }

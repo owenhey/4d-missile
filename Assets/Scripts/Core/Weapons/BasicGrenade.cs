@@ -19,6 +19,8 @@ namespace Scripts.Core.Weapons {
         private Vector3 _initialVelocity;
         private bool _fired = false;
 
+        public static Action OnGrenadeExplode;
+
         public void Setup(Vector3 startPos, Vector3 endPos) {
             _startPos = startPos;
             _endPos = endPos;
@@ -69,6 +71,8 @@ namespace Scripts.Core.Weapons {
             _model.gameObject.SetActive(false);
             _explosion.gameObject.SetActive(true);
             
+            OnGrenadeExplode?.Invoke();
+            
             DamageInArea();
             
             Destroy(gameObject, 1.0f);
@@ -84,7 +88,7 @@ namespace Scripts.Core.Weapons {
         }
 
         private float GetGrenadeRadius() {
-            return 1.0f + (_grenadeRadiusLevel.Value - 1);
+            return 1.0f + (_grenadeRadiusLevel.Value - 1) * .666f;
         }
         
 #if UNITY_EDITOR

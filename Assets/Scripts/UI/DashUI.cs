@@ -29,7 +29,7 @@ namespace Scripts.UI {
         }
 
         private void HandleDashCooldownChange(float cooldownRemaining) {
-            _cooldownImage.fillAmount = cooldownRemaining;
+            _cooldownImage.fillAmount = 1 - cooldownRemaining;
         }
     }
 }

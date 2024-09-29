@@ -49,7 +49,7 @@ namespace Scripts.Core.Enemies {
                 StartCoroutine(DelayedSpawn());
         }
 
-        private void DestroyAllEnemies() {
+        public void DestroyAllEnemies() {
             for (int i = _spawnedEnemies.Count - 1; i >= 0; i--) {
                 var enemy = _spawnedEnemies[i];
                 _spawnedEnemies.RemoveAt(i);

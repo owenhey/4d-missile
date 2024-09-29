@@ -42,6 +42,12 @@ namespace Scripts.UI {
                 _flawlessText.gameObject.SetActive(flawless);
                 yield return new WaitForSeconds(.5f);
                 _levelCompleteText.text = $"Level {performance.Level} Complete!";
+                
+                // Check for victory
+                if (performance.Level > 12) {
+                    _levelCompleteText.text = $"YOU WIN! Keep Going?";
+                }
+                
                 _levelCompleteText.DOFade(1, .5f).From(0);
                 yield return new WaitForSeconds(.5f);
                 
@@ -54,8 +60,8 @@ namespace Scripts.UI {
                 if (flawless) {
                     yield return new WaitForSeconds(.5f);
                     _flawlessText.DOFade(1, .5f).From(0);
-                    _flawlessPopup.rectTransform.DOScale(1.3f, .25f).SetDelay(1.0f).From(0).OnComplete(() => {
-                        _flawlessPopup.rectTransform.DOScale(1f, .15f).OnComplete(() => {
+                    _flawlessPopup.rectTransform.DOScale(1.3f, .2f).SetDelay(1.5f).From(0).OnComplete(() => {
+                        _flawlessPopup.rectTransform.DOScale(1f, .1f).OnComplete(() => {
                             _playerCredits.Add(25);
                             creditsTween.Kill();
                             DOTween.To(() => x, (y) => x = y, performance.CreditsEarned + 25, 1.0f).SetEase(Ease.OutCubic).OnUpdate(() => {

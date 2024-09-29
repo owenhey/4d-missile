@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Scripts.Utils;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Scripts.UI {
 
         private void OnEnable() {
             _credits.OnValueChanged += Display;
-            Display(_credits.Value);
+            Display(_credits.Value, false);
         }
 
         private void OnDisable() {
@@ -20,7 +21,18 @@ namespace Scripts.UI {
         }
 
         private void Display(int amount) {
+            Display(amount, true);
+        }
+
+        private void Display(int amount, bool animate) {
             _textField.text = "Credits: " + amount;
+            if (animate) {
+                Animate();
+            }
+        }
+
+        private void Animate() {
+            _textField.transform.DOShakePosition(.2f, 15, 20);
         }
     }
 }

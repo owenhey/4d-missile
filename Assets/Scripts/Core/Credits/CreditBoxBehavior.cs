@@ -18,31 +18,24 @@ namespace Scripts.Core.Credits {
         
         public int CreditAmount = 10;
 
-        public static Action<int> OnCreditBoxCollected;
+        public static Action<int, Vector3> OnCreditBoxCollected;
         
         private void OnTriggerEnter(Collider other) {
             if (other.CompareTag("Player")) {
                 GiveCreditsToPlayer();
-                DestroyAnimation();
                 _trigger.enabled = false;
+                Destroy(gameObject);
             }
         }
 
         private void GiveCreditsToPlayer() {
             int randomCreditAmount = (int)(Random.Range(.75f, 1.25f) * CreditAmount);
             // Factor makes it so the more you've gotten this round, it tones it down a little past 50
-            float factor = Helpers.RemapClamp(_playerCreditsThisLevel.Value, 50, 75, 1.0f, .5f);
+            float factor = Helpers.RemapClamp(_playerCreditsThisLevel.Value, 50, 75, 1.0f, .7f);
             randomCreditAmount = (int)(factor * randomCreditAmount);
             _playerCreditsThisLevel.Add(randomCreditAmount);
             _playerCredits.Add(randomCreditAmount);
-            OnCreditBoxCollected?.Invoke(randomCreditAmount);
-        }
-
-        private void DestroyAnimation() {
-            transform.DOScale(Vector3.one * 1.4f, .2f).SetEase(Ease.OutQuad).OnComplete(() => {
-                transform.DOScale(Vector3.zero, .2f).SetEase(Ease.InQuad).OnComplete((() => Destroy(gameObject)));
-            });
-            DOTween.To(()=> _rotateSpeed, x=> _rotateSpeed = x, 2500, .4f);
+            OnCreditBoxCollected?.Invoke(randomCreditAmount, transform.position);
         }
 
         private void OnDestroy() {

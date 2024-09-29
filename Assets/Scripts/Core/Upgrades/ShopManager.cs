@@ -23,6 +23,7 @@ namespace Scripts.Core.Upgrades {
         [SerializeField] private UpgradeDefinition[] _regularUpgrades;
         [SerializeField] private UpgradeDefinition[] _powerfulUpgrades;
         [SerializeField] private IntReference _playerCredits;
+        [SerializeField] private IntReference _level;
         
         public System.Action<ShopUpgradeData[]> OnShopRefresh;
         
@@ -40,6 +41,18 @@ namespace Scripts.Core.Upgrades {
                 chosenUpgrades.Add(singleUpgrade);
                 
                 possibleUpgrades.RemoveAt(randomIndex);
+            }
+            
+            // If it's the first level, then just give 3 regular
+            if (_level.Value == 1) {
+                int randomIndex = Random.Range(0, possibleUpgrades.Count);
+                var upgrade = possibleUpgrades[randomIndex];
+                ShopUpgradeData singleUpgrade = new(upgrade, 1, upgrade.Cost);
+                chosenUpgrades.Add(singleUpgrade);
+                possibleUpgrades.RemoveAt(randomIndex);
+                
+                OnShopRefresh?.Invoke(chosenUpgrades.ToArray());
+                return;
             }
             
             // Next, either choose a powerful one, or a doubled up version of a base one.

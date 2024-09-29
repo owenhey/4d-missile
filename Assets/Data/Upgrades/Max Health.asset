@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UpgradeName: Max Health
   _levelToUpgrade: {fileID: 11400000, guid: 6ae23f73f666a98418cc5b9ec51f8e0c, type: 2}
-  BaseLevel: 0
+  BaseLevel: 1
   MaxLevel: 6
   Icon: {fileID: 21300000, guid: b3784b340420fe049a6cc3e2e277e340, type: 3}
-  Text: Increase Max Health
+  Text: Increases your maximum health
   Cost: 50

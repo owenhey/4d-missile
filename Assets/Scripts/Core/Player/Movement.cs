@@ -92,7 +92,7 @@ namespace Scripts.Core.Player {
             RaycastHit hit;
             if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit, 50, _gamePlaneMask)) {
                 Vector3 directionFrom0 = Vector3.ClampMagnitude(hit.point, _validRadius.Value);
-                float maxSpeed = Input.GetKey(KeyCode.Space) ? 1.0f : _speedCalculator.GetSpeed();
+                float maxSpeed = Input.GetKey(KeyCode.LeftShift) ? 1.0f : _speedCalculator.GetSpeed();
                 float acceleration = _accelerationCalculator.GetAcceleration();
                 
                 _playerTrans.position = Vector3.SmoothDamp(_playerTrans.position, directionFrom0, ref _playerVel, acceleration, maxSpeed);

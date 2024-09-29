@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UpgradeName: Speed
   _levelToUpgrade: {fileID: 11400000, guid: 873dc90c05027bd468dd9990fd2da369, type: 2}
-  BaseLevel: 0
+  BaseLevel: 1
   MaxLevel: 6
   Icon: {fileID: 21300000, guid: 387190495388b2f4ba1760d2ab5c4850, type: 3}
-  Text: Increase your speed
+  Text: Increases the maximum speed of your character.
   Cost: 50

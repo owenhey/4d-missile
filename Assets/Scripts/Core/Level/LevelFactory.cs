@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using Scripts.Misc;
 using Scripts.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -35,7 +36,7 @@ namespace Scripts.Core.Level {
             float averageSpeed = (speed.startSpeed + speed.endSpeed) * .5f; 
             var obstacles = GetObstacles(level, averageSpeed, modifiers);
             float totalDistance = obstacles[^1].GetDistance();
-            var credits = GetCredits(obstacles);
+            var credits = GetCredits(obstacles, modifiers);
             var enemies = GetEnemies(level, totalDistance, modifiers);
                 
             LevelData levelData = new() {
@@ -77,7 +78,7 @@ namespace Scripts.Core.Level {
 
         private static (int startSpeed, int endSpeed) GetSpeeds(int level, LevelModifiers modifiers) {
             int startSpeed = (int)((level - 1) * 4.0f) + 20; // Goes from 20 to 64
-            int endSpeed = (int)(startSpeed * 1.4f); 
+            int endSpeed = (int)(startSpeed * 1.25f); 
 
             bool hasFasterModifier = modifiers.HasFlag(LevelModifiers.Faster);
             float factor = hasFasterModifier ? 1.3f : 1.0f;
@@ -106,10 +107,13 @@ namespace Scripts.Core.Level {
             return _obsSpawnables.ToArray();
         }
 
-        public static FloatSpawnable[] GetCredits<T>(IEnumerable<T> obstacles) where T : IDataSpawnable{
-            const float CREDIT_CHANCE = .35f;
-            const float DOUBLE_CREDIT_CHANCE = .15f;
-            const float TRIPLE_CREDIT_CHANCE = .05f;
+        private static FloatSpawnable[] GetCredits<T>(IEnumerable<T> obstacles, LevelModifiers modifiers) where T : IDataSpawnable {
+            // If it is longer, then reduce the number of credits
+            float modifierFactor = modifiers.HasFlag(LevelModifiers.Longer) ? .8f : 1.0f;
+            
+            float CREDIT_CHANCE = .35f * modifierFactor;
+            float DOUBLE_CREDIT_CHANCE = .15f * modifierFactor;
+            float TRIPLE_CREDIT_CHANCE = .05f * modifierFactor;
             
             List<FloatSpawnable> credits = new();
             // This just prevents from enumerating it many times
@@ -154,10 +158,12 @@ namespace Scripts.Core.Level {
                 return Array.Empty<EnemySpawnable>();
             }
 
-            float remappedLevel = Helpers.RemapNoClamp(level, 2, 12, 1, 3);
+            float remappedLevel = Helpers.RemapNoClamp(level, 2, 12, 1.333f, 3);
                 
-                
-            int numEnemies = (int)(5 * remappedLevel);
+            // Some more enemies if the level is longer
+            int baseLevelAmount = modifiers.HasFlag(LevelModifiers.Longer) ? 6 : 5;
+            
+            int numEnemies = (int)(baseLevelAmount * remappedLevel);
             bool hasMoreEnemies = modifiers.HasFlag(LevelModifiers.MoreEnemies);
             if (hasMoreEnemies) {
                 numEnemies = (int)(numEnemies * 1.5f);
@@ -178,16 +184,22 @@ namespace Scripts.Core.Level {
             // Calculate a few places to spawn in more enemies (2 or 3 enemies at once)
             int numDoubleEnemies = 0;
             if (level > 2) {
-                numDoubleEnemies = hasMoreEnemies ? 3 : 2;
-            }
-            if (level > 4) {
                 numDoubleEnemies = hasMoreEnemies ? 4 : 3;
             }
-            if (level > 6) {
+            if (level > 4) {
                 numDoubleEnemies = hasMoreEnemies ? 5 : 4;
+            }
+            if (level > 6) {
+                numDoubleEnemies = hasMoreEnemies ? 6 : 5;
             }
 
             int numTripleEnemies = 0;
+            if (level > 5) {
+                numTripleEnemies = 1;
+            }
+            if (level > 7) {
+                numTripleEnemies = 2;
+            }
             if (level > 8) {
                 numTripleEnemies = hasMoreEnemies ? level - 7 : (level - 7) / 2;
             }

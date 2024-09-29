@@ -47,8 +47,6 @@ namespace Scripts.UI {
         }
 
         private void UpdateModifierText() {
-            Debug.Log("Updating Modifier Text!");
-            
             _modifierTitleField.Text.DOFade(1.0f, .3f).From(0).SetDelay(.75f);
             _modifierTitleField.Parent.transform.DOScale(Vector3.one * 1.25f, .15f).SetDelay(.75f).OnComplete(() => {
                 _modifierTitleField.Parent.transform.DOScale(Vector3.one, .15f);
@@ -113,12 +111,12 @@ namespace Scripts.UI {
         }
 
         private void OnShopRefreshClick() {
-            _playerCredits.Add(-30);
+            _playerCredits.Add(-15);
             _shopManager.RefreshShop();
         }
 
         private void CreditsChangeHandler(int value) {
-            _refreshShopButton.interactable = value >= 30;
+            _refreshShopButton.interactable = value >= 20;
         }
 
         private void Awake() {

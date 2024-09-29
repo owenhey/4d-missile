@@ -8,7 +8,7 @@ namespace Scripts.UI {
 
         private void OnEnable() {
             var cg = GetComponent<CanvasGroup>();
-            cg.DOFade(TargetA, .5f).From(0);
+            cg.DOFade(TargetA, .5f).From(0).SetUpdate(true);
         }
     }
 }

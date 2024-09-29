@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Scripts.Core.Upgrades;
@@ -11,6 +12,7 @@ namespace Scripts.UI{
     public class UpgradeOptionUI : MonoBehaviour {
         [SerializeField] private CanvasGroup _cg;
         [SerializeField] private TextMeshProUGUI _optionTitleField;
+        [SerializeField] private TextMeshProUGUI _optionDescField;
         [SerializeField] private Image _iconImage;
         [SerializeField] private TextMeshProUGUI _costField;
         [SerializeField] private TextMeshProUGUI _levelCountField;
@@ -27,6 +29,20 @@ namespace Scripts.UI{
         private ShopUpgradeData _upgradeShowing;
         public UpgradeDefinition GetUpgradeShowing() => _upgradeShowing.UpgradeDef;
 
+        private void OnEnable() {
+            _playerCredits.OnValueChanged += HandleCreditsChange;
+        }
+
+        private void OnDisable() {
+            _playerCredits.OnValueChanged -= HandleCreditsChange;
+        }
+        
+        private void HandleCreditsChange(int newCredits) {
+            if (GetUpgradeShowing() != null) {
+                RefreshBuyButton(newCredits);
+            }
+        }
+
         private void Awake() {
             _buyButton.onClick.AddListener(TryBuy);
             _playerCredits.OnValueChanged += RefreshBuyButton;
@@ -36,6 +52,7 @@ namespace Scripts.UI{
             _upgradeShowing = upgradeData;
             
             _optionTitleField.text = upgradeData.UpgradeDef.UpgradeName;
+            _optionDescField.text = upgradeData.UpgradeDef.Text;
             _costField.text = "Credits: " + upgradeData.Cost;
             _iconImage.sprite = upgradeData.UpgradeDef.Icon;
 
@@ -53,6 +70,8 @@ namespace Scripts.UI{
             
             ShowBuyButton();
             RefreshBuyButton(_playerCredits.Value);
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
 
         private void UpdateCurrentLevelUI() {
@@ -78,6 +97,8 @@ namespace Scripts.UI{
             int cost = _upgradeShowing.Cost;
 
             if (playerCredits < cost) return;
+            
+            Debug.Log("Trying to buy: " + _upgradeShowing.UpgradeDef.UpgradeName);
             
             _playerCredits.Add(-_upgradeShowing.Cost);
             _upgradeShowing.UpgradeDef.Upgrade(_upgradeShowing.LevelsToUpgrade);

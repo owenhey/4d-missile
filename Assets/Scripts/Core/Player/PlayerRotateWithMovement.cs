@@ -15,6 +15,8 @@ namespace Scripts.Core.Player {
         }
 
         private void Update() {
+            if (Time.timeScale == 0) return;
+            
             Vector3 delta = transform.position - _lastFramePosition;
             _lastFramePosition = transform.position;
             float xVelocity = delta.x / (Time.deltaTime);

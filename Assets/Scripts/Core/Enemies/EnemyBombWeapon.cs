@@ -8,9 +8,10 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private EnemyBomb _bombPrefab;
         [SerializeField] private float _bombTravelTime = 1.0f;
         [SerializeField] private float _bombDelayTime = .75f;
-        
-        
+
+        public static System.Action OnBombThrow;
         protected override void FireWeapon() {
+            OnBombThrow?.Invoke();
             Vector3 playerPos = _baseEnemy.PlayerTrans.position;
             float timeFactor = _baseEnemy.Harder ? _harderFactor : 1.0f;
             Instantiate(_bombPrefab).Setup(transform.position, playerPos, _bombTravelTime * timeFactor, _bombDelayTime * timeFactor);

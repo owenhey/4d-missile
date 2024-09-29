@@ -9,10 +9,7 @@ namespace Scripts.Core.Enemies {
         [SerializeField] private float _laserDelayTime;
         [SerializeField] private DamagePlayerCollider _damagePlayerCollider;
 
-        private void Awake() {
-            float factor = _harder ? _harderFactor : 1.0f;
-            _laserDelayTime *= factor;
-        }
+        public static System.Action OnLaserFire;
         
         protected override void FireWeapon() {
             StartCoroutine(FireLaser());
@@ -27,8 +24,12 @@ namespace Scripts.Core.Enemies {
             _laser.forward = torwardsPlayer;
             _damagePlayerCollider.Enabled = false;
             _damagePlayerCollider.HasDamaged = false;
+            
+            float factor = _harder ? _harderFactor : 1.0f;
 
-            yield return new WaitForSeconds(_laserDelayTime);
+            yield return new WaitForSeconds(_laserDelayTime * factor);
+            
+            OnLaserFire?.Invoke();
             _laser.DOScale(new Vector3(.4f, .4f, 1), .1f).OnComplete(() => {
                 _damagePlayerCollider.Enabled = true;
                 _laser.DOScale(new Vector3(0, 0, 1), .15f).SetDelay(.1f).OnComplete(() => {

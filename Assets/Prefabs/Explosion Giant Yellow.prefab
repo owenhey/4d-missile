@@ -86,7 +86,7 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: ClampVelocityModule.dampen
-      value: 0.25
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
@@ -121,7 +121,7 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 1.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
@@ -136,7 +136,7 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
-      value: 0.75
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
@@ -246,7 +246,7 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
@@ -256,7 +256,7 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: InitialModule.startSpeed.maxCurve.m_Curve.Array.data[1].time
-      value: 0.19872868
+      value: 0.41424668
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
@@ -271,12 +271,12 @@ PrefabInstance:
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: InitialModule.startSpeed.maxCurve.m_Curve.Array.data[1].value
-      value: 1
+      value: 0.43306732
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}
       propertyPath: InitialModule.startSpeed.maxCurve.m_Curve.Array.data[2].value
-      value: 1
+      value: 0.53543246
       objectReference: {fileID: 0}
     - target: {fileID: 7875320413329772514, guid: 90dfb2aed4de5c041916a9f1c24b92a5,
         type: 3}

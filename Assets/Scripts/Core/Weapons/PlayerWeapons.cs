@@ -29,13 +29,13 @@ namespace Scripts.Core.Weapons {
         private bool _watchingNearbyBombCooldown = false;
         
         
-        
         private Camera _camera;
         
         private bool _lookingForBombRefresh = false;
         private Tween _bombCooldownTween;
         
         private bool _lookingForTimeSlowFinish = false;
+        private bool _firedEndTimeSlow = false;
         private Tween _timeSlowTween;
         
         
@@ -43,6 +43,8 @@ namespace Scripts.Core.Weapons {
         
         public static Action<Vector3> OnNearbyBomb;
         public static Action<Vector3> OnBombThrow;
+        public static Action OnTimeSlow;
+        public static Action OnTimeSlowEnd;
 
         private void Start() {
             _camera = Camera.main;
@@ -64,9 +66,9 @@ namespace Scripts.Core.Weapons {
         private void HandleGameStateChange(GameState newState) {
             if (newState == GameState.Game) {
                 // Reset the bombs
+                _lookingForBombRefresh = false;
                 _bombCharges.SetValue(_bombLevel.Value);
                 _bombCooldown.SetValue(0);
-                _lookingForBombRefresh = false;
                 _bombCooldownTween?.Kill();
                 
                 _timeCooldown.SetValue(0);
@@ -108,7 +110,7 @@ namespace Scripts.Core.Weapons {
             }
             
             bool canNearbyBomb = _nearbyBombCharges.Value > 0;
-            if (canNearbyBomb && Input.GetKeyDown(KeyCode.LeftShift)) {
+            if (canNearbyBomb && Input.GetKeyDown(KeyCode.Space)) {
                 NearbyBomb();
             }
         }
@@ -136,17 +138,29 @@ namespace Scripts.Core.Weapons {
         
 
         private void TimeSlow() {
-            Time.timeScale = .5f;
+            const float TIME_SCALE_AMOUNT = .5f;
+            
+            Time.timeScale = TIME_SCALE_AMOUNT;
             _timeSlowCount.Add(-1);
             
+            OnTimeSlow?.Invoke();
+
+            _firedEndTimeSlow = false;
+            
             _timeSlowTween?.Kill();
-            _timeSlowTween = DOTween.To(() => _timeCooldown.Value, x => _timeCooldown.SetValue(x), 0, 3f).From(1)
-                .SetEase(Ease.Linear).SetUpdate(true);
+            _timeSlowTween = DOTween.To(() => _timeCooldown.Value, x => _timeCooldown.SetValue(x), 0, 3f * TIME_SCALE_AMOUNT).From(1)
+                .SetEase(Ease.Linear);
             _lookingForTimeSlowFinish = true;
         }
         
         private void HandleTimeSlowDuration(float value) {
             if (!_lookingForTimeSlowFinish) return;
+            
+            bool shouldFireTimeSlow = Mathf.Abs(value - .2f) < .1f;
+            if (shouldFireTimeSlow && !_firedEndTimeSlow) {
+                _firedEndTimeSlow = true;
+                OnTimeSlowEnd?.Invoke();
+            }
             
             bool valueIsBasicallyZero = Mathf.Abs(value) < .001f;
             if (valueIsBasicallyZero) {
@@ -170,7 +184,7 @@ namespace Scripts.Core.Weapons {
         private void StartBombCooldown() {
             if (_lookingForBombRefresh) return; // This stops it if there is already a cooldown happening
             _bombCooldownTween?.Kill();
-            _bombCooldownTween = DOTween.To(()=>_bombCooldown.Value, x => _bombCooldown.SetValue(x), 0, 3.5f).From(1).SetEase(Ease.Linear);
+            _bombCooldownTween = DOTween.To(()=>_bombCooldown.Value, x => _bombCooldown.SetValue(x), 0, 3f).From(1).SetEase(Ease.Linear);
             _lookingForBombRefresh = true;
         }
 

@@ -189,7 +189,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 2.998582}
+  m_Size: {x: 1.4, y: 1.4, z: 2.998582}
   m_Center: {x: 0, y: 0, z: -0.006905973}
 --- !u!114 &1725262656683407634
 MonoBehaviour:
@@ -211,7 +211,7 @@ MonoBehaviour:
   - {fileID: 7987293570745511510}
   - {fileID: 4427187608887008953}
   - {fileID: 3911686643520438768}
-  CreditAmount: 10
+  CreditAmount: 8
 --- !u!114 &5126757239986891125
 MonoBehaviour:
   m_ObjectHideFlags: 0

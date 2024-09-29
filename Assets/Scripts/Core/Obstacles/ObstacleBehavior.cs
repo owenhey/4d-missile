@@ -20,6 +20,8 @@ namespace Scripts.Core.Obstacles {
 
         public static Action<bool> OnObstaclePass;
 
+        public static Action OnHitObstacle;
+
         public bool IsFinishLine;
 
         private int _randomRotateDirection;
@@ -37,8 +39,9 @@ namespace Scripts.Core.Obstacles {
             _lastObstacleChosen = (_lastObstacleChosen + Random.Range(1, _colliderOptions.Length)) %
                                   _colliderOptions.Length;
             for (int i = 0; i < _colliderOptions.Length; i++) {
-                _colliderOptions[i].gameObject.SetActive(i == _lastObstacleChosen);
+                _colliderOptions[i].gameObject.SetActive(false);
             }
+            _colliderOptions[_lastObstacleChosen].gameObject.SetActive(true);
 
             _hiders = _trans.GetComponentsInChildren<ObstacleHider>();
             
@@ -52,7 +55,7 @@ namespace Scripts.Core.Obstacles {
 
         public void CollideWithPlayer() {
             if (_hitPlayer) return;
-            
+            OnHitObstacle?.Invoke();
             _hitPlayer = true;
             int damage = 30 + (_currentLevel.Value - 1) * 4;
             _playerMovement.TakeDamage(damage);

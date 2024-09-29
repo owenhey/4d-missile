@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Scripts.Core;
+using Scripts.Core.Credits;
 using Scripts.Core.Player;
 using Scripts.Core.Weapons;
 using Scripts.Utils;
@@ -12,9 +14,10 @@ namespace Scripts.Effects {
         [SerializeField] private GameObject _bombPositionMarker;
         [SerializeField] private GameObject _bigExplosion;
         [SerializeField] private GameObject _nearbyBombExplosion;
+        [SerializeField] private GameObject _creditExplosion;
         [SerializeField] private Movement _player;
+        [SerializeField] private Transform _cameraTransform;
         
-
         [Header("Dots / Lines")] 
         [SerializeField] private ParticleSystem _dotsPS;
         [SerializeField] private ParticleSystem _linesPS;
@@ -56,11 +59,21 @@ namespace Scripts.Effects {
             bigExplosion.transform.position = pos;
             Destroy(bigExplosion, 2);
         }
+        
+        private void HandleCreditCollected(int _, Vector3 pos) {
+            GameObject creditExplosion = Instantiate(_creditExplosion, transform);
+            creditExplosion.transform.position = pos;
+            Destroy(creditExplosion, 2);
+        }
 
         private void HandleGameStateChange(GameState state) {
             if (state == GameState.Game) {
                 _dotsPS.Play();
             }
+        }
+
+        private void HandleTakeDamage(float damage) {
+            _cameraTransform.DOShakePosition(.25f, .5f, 30);
         }
         
 
@@ -73,6 +86,8 @@ namespace Scripts.Effects {
             Movement.OnPlayerDeath += HandlePlayerDeath;
             _playerSpeed.OnValueChanged += HandlePlayerSpeedChange;
             PlayerWeapons.OnNearbyBomb += HandleNearbyBomb;
+            CreditBoxBehavior.OnCreditBoxCollected += HandleCreditCollected;
+            Movement.OnTakeDamage += HandleTakeDamage;
             
             HandlePlayerSpeedChange(_playerSpeed.Value);
         }
@@ -82,6 +97,8 @@ namespace Scripts.Effects {
             Movement.OnPlayerDeath -= HandlePlayerDeath;
             _playerSpeed.OnValueChanged -= HandlePlayerSpeedChange;
             PlayerWeapons.OnNearbyBomb += HandleNearbyBomb;
+            Movement.OnTakeDamage -= HandleTakeDamage;
+            CreditBoxBehavior.OnCreditBoxCollected += HandleCreditCollected;
         }
     }
 }

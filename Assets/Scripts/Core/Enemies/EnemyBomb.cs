@@ -20,6 +20,8 @@ namespace Scripts.Core.Enemies {
         private Material _material;
         private float _animateMatTimerStart;
         private float _explodeDelay;
+
+        public static Action OnBombExplode;
             
         public void Setup(Vector3 startPos, Vector3 endPos, float timeToArrive, float explodeDelay) {
             transform.position = startPos;
@@ -59,6 +61,8 @@ namespace Scripts.Core.Enemies {
             _explosion.gameObject.SetActive(true);
             
             DamageInArea();
+            
+            OnBombExplode?.Invoke();
             
             Destroy(gameObject, 1.0f);
         }

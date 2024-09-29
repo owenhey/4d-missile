@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Scripts.Core.Player;
@@ -16,6 +17,8 @@ namespace Scripts.Core.Enemies {
         private Material _material;
         private static readonly int T = Shader.PropertyToID("_T");
 
+        public static Action OnExplode;
+        
         private void Awake() {
             float factor = _harder ? _harderFactor : 1.0f;
             _timeToExplode *= factor;
@@ -41,6 +44,8 @@ namespace Scripts.Core.Enemies {
 
         private void Explode() {
             _model.DOShakePosition(.4f, 1.0f, 10);
+            
+            OnExplode?.Invoke();
             
             // Deal the damage
             int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 20.0f, PlayerWeapons.HitColliders, Enemy.PlayerMask);

@@ -11,9 +11,12 @@ namespace Scripts.UI {
     public class HeartsUI : MonoBehaviour {
         [SerializeField] private IntReference _heartCount;
         [SerializeField] private List<Image> _hearts;
+        [SerializeField] private Transform _heartTextTransform;
 
         private void HeartChangeHandler(int heartCount, bool animate) {
             _hearts.EnsureEnoughElements(heartCount);
+            _heartTextTransform.SetSiblingIndex(_heartTextTransform.parent.childCount - 1);
+            
             for (int i = 0; i < Mathf.Max(heartCount, _hearts.Count); i++) {
                 bool activeBefore = _hearts[i].gameObject.activeInHierarchy;
                 bool activeNow = i < heartCount;
